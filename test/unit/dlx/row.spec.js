@@ -1,5 +1,5 @@
-var Row = require('../../../src/lib/row');
-var DataObject = require('../../../src/lib/data-object');
+var Row = require('../../../src/lib/row').default;
+var DataObject = require('../../../src/lib/data-object').default;
 
 var _ = require('lodash');
 

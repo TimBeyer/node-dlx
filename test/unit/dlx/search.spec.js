@@ -26,7 +26,7 @@ describe('search', function () {
             var solutions = search.findAll(constraints);
 
             var data = _.map(solutions, function (solution) {
-                return _.pluck(solution, 'data');
+                return _.map(solution, 'data');
             });
 
             data[0].sort().should.eql([0,1,2]);
@@ -62,7 +62,7 @@ describe('search', function () {
             var solutions = search.findAll(constraints);
 
             var data = _.map(solutions, function (solution) {
-                return _.pluck(solution, 'data');
+                return _.map(solution, 'data');
             });
 
             data.length.should.eql(1);
