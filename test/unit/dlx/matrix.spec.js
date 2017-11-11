@@ -1,6 +1,6 @@
 var _ = require('lodash');
-var createMatrix = require('../../lib/matrix');
-var search = require('../../lib/search');
+var createMatrix = require('../../../src/lib/matrix');
+var search = require('../../../src/lib/search');
 
 
 xdescribe('matrix', function () {

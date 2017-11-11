@@ -1,4 +1,4 @@
-var DataObject = require('../../lib/data-object');
+var DataObject = require('../../../src/lib/data-object');
 var _ = require('lodash');
 
 describe('data-object', function () {
