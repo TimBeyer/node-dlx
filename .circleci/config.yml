@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  test:
+    parallelism: 1
+    docker:
+      - image: node:8
+        environment:
+          NPM_CONFIG_PROGRESS: false
+          NPM_CONFIG_LOGLEVEL: warn
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Lint
+          command: |
+            npm run lint
+      - run:
+          name: Unit Tests
+          command: |
+            npm run test
+
+workflows:
+  version: 2
+  test-and-cover:
+    jobs:
+      - test
