@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var search = require('../../index');
+var search = require('../../../src/index');
 
 describe('search', function () {
     describe('when searching for all solutions with mandatory constraints', function () {
@@ -26,10 +26,8 @@ describe('search', function () {
             var solutions = search.findAll(constraints);
 
             var data = _.map(solutions, function (solution) {
-                return _.pluck(solution, 'data');
+                return _.map(solution, 'data');
             });
-
-            console.log(solutions)
 
             data[0].sort().should.eql([0,1,2]);
             data[1].sort().should.eql([1,3]);
@@ -64,7 +62,7 @@ describe('search', function () {
             var solutions = search.findAll(constraints);
 
             var data = _.map(solutions, function (solution) {
-                return _.pluck(solution, 'data');
+                return _.map(solution, 'data');
             });
 
             data.length.should.eql(1);
