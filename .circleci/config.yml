@@ -19,7 +19,7 @@ jobs:
       - run:
           name: Unit Tests
           command: |
-            npm run test
+            npm run coverage-report
 
 workflows:
   version: 2
