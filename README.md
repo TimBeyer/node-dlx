@@ -1,6 +1,8 @@
 dancing-links
 =============
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/TimBeyer/node-dlx.svg)](https://greenkeeper.io/)
+
 About
 -----
 
