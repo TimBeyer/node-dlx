@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash": "^3.8.0"
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "chai": "^2.3.0"
+    "chai": "^4.1.2"
   }
 }
