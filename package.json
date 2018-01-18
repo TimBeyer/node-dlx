@@ -12,7 +12,7 @@
     "prepare": "npm run build",
     "test": "npm run test-unit",
     "test-watch": "npm run test-unit -- --watch",
-    "test-unit": "NODE_ENV=test mocha --compilers ts-node/register 'test/unit/**/*.spec.js' 'test/unit/**/*.spec.ts'",
+    "test-unit": "NODE_ENV=test mocha --require ts-node/register 'test/unit/**/*.spec.js' 'test/unit/**/*.spec.ts'",
     "cover": "nyc npm run test-unit",
     "coverage": "npm run cover && nyc report --reporter=text-lcov > coverage.lcov",
     "coverage-report": "npm run coverage && codecov && rm -rf ./nyc_output && rm coverage.lcov",
