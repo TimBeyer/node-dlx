@@ -1,43 +1,41 @@
 import DataObject from './data-object'
 import Row from './row'
 import Column from './column'
-import * as _ from 'lodash'
 import { isSimpleConstraint, isComplexConstraint, Constraint } from './constraint'
 
-let createDataObjects = function createDataObjects (constraint: Constraint): DataObject[] {
-  let primaryConstraints = []
-  let secondaryConstraints = []
+function createDataObjects (constraint: Constraint): Array<DataObject | undefined> {
+  const constraints: Array<DataObject | undefined> = []
 
   if (isSimpleConstraint(constraint)) {
-    primaryConstraints = _.map(constraint.row, function (isActive) {
+    for (const isActive of constraint.row) {
       if (isActive) {
-        let dataObject = new DataObject(constraint, false)
-        return dataObject
+        const dataObject = new DataObject(constraint, false)
+        constraints.push(dataObject)
       } else {
-        return undefined
+        constraints.push(undefined)
       }
-    })
+    }
   } else if (isComplexConstraint(constraint)) {
-    primaryConstraints = _.map(constraint.primaryRow, function (isActive) {
+    for (const isActive of constraint.primaryRow) {
       if (isActive) {
-        let dataObject = new DataObject(constraint, false)
-        return dataObject
+        const dataObject = new DataObject(constraint, false)
+        constraints.push(dataObject)
       } else {
-        return undefined
+        constraints.push(undefined)
       }
-    })
+    }
 
-    secondaryConstraints = _.map(constraint.secondaryRow || [], function (isActive) {
+    for (const isActive of constraint.secondaryRow) {
       if (isActive) {
-        let dataObject = new DataObject(constraint, true)
-        return dataObject
+        const dataObject = new DataObject(constraint, true)
+        constraints.push(dataObject)
       } else {
-        return undefined
+        constraints.push(undefined)
       }
-    })
+    }
   }
 
-  return primaryConstraints.concat(secondaryConstraints)
+  return constraints
 }
 
 let createMatrix = function createMatrix (constraints: Constraint[]) {
@@ -46,28 +44,40 @@ let createMatrix = function createMatrix (constraints: Constraint[]) {
   let headerRow = new Row(true)
   headerRow.append(root)
 
-  let dataObjectRows = _.map(constraints, createDataObjects)
+  let dataObjectRows = constraints.map(createDataObjects)
   let width = dataObjectRows[0].length
-  let columnArray = _.map(_.range(0, width), function (index) {
-    return _.compact(_.map(dataObjectRows, function (dataObjectRow) {
-      return dataObjectRow[index]
-    }))
-  })
 
-  let columns = _.map(columnArray, function (dataObjects) {
-    let column = new Column(dataObjects[0].isOptional)
-    _.each(dataObjects, column.append.bind(column))
+  const columnArray = []
 
-    return column
-  })
+  for (let i = 0; i < width; i++) {
+    const column = []
 
-  _.each(columns, headerRow.append.bind(headerRow))
+    for (const dataObjectRow of dataObjectRows) {
+      const dataObject = dataObjectRow[i]
+      if (dataObject) {
+        column.push(dataObject)
+      }
+    }
 
-  _.each(dataObjectRows, function (dataObjectRow) {
-    let dataObjects = _.compact(dataObjectRow)
-    let row = new Row()
-    _.each(dataObjects, row.append.bind(row))
-  })
+    columnArray.push(column)
+  }
+
+  for (const dataObjects of columnArray) {
+    const column = new Column(dataObjects[0].isOptional)
+    for (const dataObject of dataObjects) {
+      column.append(dataObject)
+    }
+    headerRow.append(column)
+  }
+
+  for (const dataObjects of dataObjectRows) {
+    const row = new Row()
+    for (const dataObject of dataObjects) {
+      if (dataObject) {
+        row.append(dataObject)
+      }
+    }
+  }
 
   return root
 }
