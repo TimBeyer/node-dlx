@@ -1,8 +1,6 @@
 var Column = require('../../../src/lib/column').default;
 var DataObject = require('../../../src/lib/data-object').default;
 
-var _ = require('lodash');
-
 describe('column', function () {
 
     it('exists', function () {
@@ -11,7 +9,6 @@ describe('column', function () {
 
     describe('when creating a column', function () {
         var column;
-        var columnName = 'test';
 
         beforeEach(function () {
             column = new Column();

@@ -1,8 +1,6 @@
 var Row = require('../../../src/lib/row').default;
 var DataObject = require('../../../src/lib/data-object').default;
 
-var _ = require('lodash');
-
 describe('row', function () {
 
     it('exists', function () {

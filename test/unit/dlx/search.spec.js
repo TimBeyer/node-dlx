@@ -1,4 +1,3 @@
-var _ = require('lodash');
 var search = require('../../../src/index');
 
 describe('search', function () {
@@ -25,8 +24,8 @@ describe('search', function () {
 
             var solutions = search.findAll(constraints);
 
-            var data = _.map(solutions, function (solution) {
-                return _.map(solution, 'data');
+            var data = solutions.map(function (solution) {
+                return solution.map((s) => s.data);
             });
 
             data[0].sort().should.eql([0,1,2]);
@@ -61,8 +60,8 @@ describe('search', function () {
 
             var solutions = search.findAll(constraints);
 
-            var data = _.map(solutions, function (solution) {
-                return _.map(solution, 'data');
+            var data = solutions.map(function (solution) {
+                return solution.map((s) => s.data);
             });
 
             data.length.should.eql(1);
