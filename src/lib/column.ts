@@ -35,8 +35,10 @@ class Column {
     this.left.right = this.right
 
     let downNeighbor = this.down
+
     while (downNeighbor !== this) {
       let rightNeighbor = downNeighbor.right
+
       while (rightNeighbor !== downNeighbor) {
         // For every row downwards, unlink all nodes from their columns left to right
         rightNeighbor.down.up = rightNeighbor.up
@@ -53,8 +55,10 @@ class Column {
 
   uncover () {
     let upNeighbor = this.up
+
     while (upNeighbor !== this) {
       let leftNeighbor = upNeighbor.left
+
       while (leftNeighbor !== upNeighbor) {
         this.size += 1
 

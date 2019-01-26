@@ -1,41 +1,47 @@
 import Column from './column'
 
 let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
-  let chooseColumn = function () {
+  function chooseColumn () {
     let smallestColumn = root.right
-
     let currentColumn = root.right
+
     while (currentColumn !== root) {
       if (currentColumn.size < smallestColumn.size) {
         smallestColumn = currentColumn
       }
       currentColumn = currentColumn.right
     }
+
     return smallestColumn
   }
 
-  let doSearch = function doSearch () {
-    let objects = []
-    let results = []
+  function doSearch () {
+    const objects = []
+    const results = []
     let stopped = false;
 
     (function search (k) {
       if (root === root.right) {
-        let result = []
+        const result = []
+
         for (let i = 0; i < k; i++) {
-          let o = objects[i]
+          const o = objects[i]
           result.push(o.data)
         }
+
         results.push(result)
+
         if (!findAll) {
           stopped = true
         }
+
         return
       }
 
       if (stopped) {
         return
       }
+
       let currentColumnHeader
       let dataObject
       let neighbor
@@ -47,8 +53,8 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
 
       while (dataObject !== currentColumnHeader) {
         objects[k] = dataObject
-
         neighbor = dataObject.right
+
         while (neighbor !== dataObject) {
           neighbor.columnHeader.cover()
           neighbor = neighbor.right
@@ -62,6 +68,7 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
         currentColumnHeader = dataObject.columnHeader
 
         neighbor = neighbor.left
+
         while (neighbor !== dataObject) {
           neighbor.columnHeader.uncover()
           neighbor = neighbor.left
@@ -76,6 +83,7 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
     })(0)
 
     let result = findAll ? results : results[0]
+
     return result
   }
 
