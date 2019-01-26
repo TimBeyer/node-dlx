@@ -2,13 +2,13 @@
   "name": "dancing-links",
   "version": "1.0.0",
   "description": "",
-  "main": "built/index.js",
+  "main": "built/lib/index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "clean": "rimraf built",
-    "build": "npm run clean && tsc -p .",
+    "build": "npm run clean && tsc -p tsconfig.release.json",
     "prepare": "npm run build",
     "test": "npm run test-unit",
     "test-watch": "npm run test-unit -- --watch",

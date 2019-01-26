@@ -1,4 +1,4 @@
-import Constraint from './lib/constraint'
+import { Constraint } from './lib/constraint'
 import matrix from './lib/matrix'
 import * as search from './lib/search'
 

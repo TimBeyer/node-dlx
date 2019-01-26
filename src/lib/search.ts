@@ -1,4 +1,6 @@
 import Column from './column'
+import DataObject from './data-object'
+import { Constraint } from './constraint'
 
 let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
   function chooseColumn () {
@@ -16,8 +18,8 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
   }
 
   function doSearch () {
-    const objects = []
-    const results = []
+    const objects: DataObject[] = []
+    const results: Constraint[][] = []
     let stopped = false;
 
     (function search (k) {
@@ -42,17 +44,17 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
         return
       }
 
-      let currentColumnHeader
-      let dataObject
-      let neighbor
+      let currentColumnHeader: Column
+      let dataObject: DataObject
+      let neighbor: Column
 
       currentColumnHeader = chooseColumn()
       currentColumnHeader.cover()
 
-      dataObject = currentColumnHeader.down
+      dataObject = currentColumnHeader.down as DataObject
 
       while (dataObject !== currentColumnHeader) {
-        objects[k] = dataObject
+        objects[k] = dataObject as DataObject
         neighbor = dataObject.right
 
         while (neighbor !== dataObject) {
@@ -74,7 +76,7 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
           neighbor = neighbor.left
         }
 
-        dataObject = dataObject.down
+        dataObject = dataObject.down as DataObject
       }
 
       currentColumnHeader.uncover()

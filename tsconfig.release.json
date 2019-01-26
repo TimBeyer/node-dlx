@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "outDir": "./built/lib",
-    "allowJs": true,
     "target": "es2017",
     "module": "commonjs",
     "lib": [
@@ -13,7 +12,13 @@
     "sourceMap": true,
     "moduleResolution": "node",
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "declaration": true,
+    "strict": true,
+    "declarationDir": "./built/typings"
   },
   "include": [
     "./src/**/*"

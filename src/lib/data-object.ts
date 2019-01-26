@@ -1,5 +1,5 @@
 import Column from './column'
-import Constraint from './constraint'
+import { Constraint } from './constraint'
 
 class DataObject extends Column {
   public data: Constraint
