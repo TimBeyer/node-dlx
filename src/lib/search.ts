@@ -1,5 +1,4 @@
 import Column from './column'
-import * as _ from 'lodash'
 
 let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
   let chooseColumn = function () {
@@ -23,10 +22,10 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
     (function search (k) {
       if (root === root.right) {
         let result = []
-        _.each(_.range(0, k), function (i) {
+        for (let i = 0; i < k; i++) {
           let o = objects[i]
           result.push(o.data)
-        })
+        }
         results.push(result)
         if (!findAll) {
           stopped = true
