@@ -16,7 +16,8 @@
     "cover": "nyc npm run test-unit",
     "coverage": "npm run cover && nyc report --reporter=text-lcov > coverage.lcov",
     "coverage-report": "npm run coverage && codecov && rm -rf ./nyc_output && rm coverage.lcov",
-    "lint": "tslint --project tsconfig.json --config tslint.json"
+    "lint": "tslint --project tsconfig.json --config tslint.json",
+    "benchmark": "ts-node benchmark/index.ts"
   },
   "nyc": {
     "per-file": true,
@@ -44,9 +45,12 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "@types/benchmark": "^1.0.31",
     "@types/chai": "^4.0.4",
     "@types/lodash": "^4.14.85",
     "@types/mocha": "^2.2.44",
+    "@types/node": "^10.12.18",
+    "benchmark": "^2.1.4",
     "chai": "^2.3.0",
     "codecov": "^3.0.0",
     "mocha": "^5.0.0",
