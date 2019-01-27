@@ -2,7 +2,7 @@ import Column from './column'
 import DataObject from './data-object'
 import { Constraint } from './constraint'
 
-let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
+let searchMatrix = function searchMatrix (root: Column, limit: number = Infinity) {
   function chooseColumn () {
     let smallestColumn = root.right
     let currentColumn = root.right
@@ -33,7 +33,7 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
 
         results.push(result)
 
-        if (!findAll) {
+        if (results.length === limit) {
           stopped = true
         }
 
@@ -90,17 +90,22 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
   return doSearch()
 }
 
+const find = function (column: Column, numResults: number): Constraint[][] {
+  return searchMatrix(column, numResults)
+}
+
 const findAll = function (column: Column): Constraint[][] {
-  return searchMatrix(column, true)
+  return searchMatrix(column)
 }
 
 const findOne = function (column: Column): Constraint[] {
-  const result = searchMatrix(column, false)
+  const result = searchMatrix(column, 1)
 
   return result[0]
 }
 
 export {
   findAll,
+  find,
   findOne
 }
