@@ -1,12 +1,12 @@
-export interface SimpleConstraint {
+export interface SimpleConstraint<T = any> {
   row: number[],
-  data: any
+  data: T
 }
 
-export interface ComplexConstraint {
+export interface ComplexConstraint<T = any> {
   primaryRow: number[]
   secondaryRow: number[],
-  data: any
+  data: T
 }
 
 export function isSimpleConstraint (arg: any): arg is SimpleConstraint {
@@ -17,4 +17,4 @@ export function isComplexConstraint (arg: any): arg is ComplexConstraint {
   return arg.primaryRow !== undefined && arg.secondaryRow !== undefined
 }
 
-export type Constraint = SimpleConstraint | ComplexConstraint
+export type Constraint<T = any> = SimpleConstraint<T> | ComplexConstraint<T>

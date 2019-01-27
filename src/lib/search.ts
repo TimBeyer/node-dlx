@@ -84,21 +84,22 @@ let searchMatrix = function searchMatrix (root: Column, findAll: boolean) {
       return
     })(0)
 
-    let result = findAll ? results : results[0]
-
-    return result
+    return results
   }
 
   return doSearch()
 }
 
-const findAll = function (column: Column) {
+const findAll = function (column: Column): Constraint[][] {
   return searchMatrix(column, true)
 }
 
-const findOne = function (column: Column) {
-  return searchMatrix(column, false)
+const findOne = function (column: Column): Constraint[] {
+  const result = searchMatrix(column, false)
+
+  return result[0]
 }
+
 export {
   findAll,
   findOne
