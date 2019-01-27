@@ -9,6 +9,7 @@
   "scripts": {
     "clean": "rimraf built",
     "build": "npm run clean && tsc -p tsconfig.release.json",
+    "build-dev": "npm run clean && tsc -p tsconfig.dev.json",
     "prepare": "npm run build",
     "test": "npm run test-unit",
     "test-watch": "npm run test-unit -- --watch",
@@ -17,7 +18,8 @@
     "coverage": "npm run cover && nyc report --reporter=text-lcov > coverage.lcov",
     "coverage-report": "npm run coverage && codecov && rm -rf ./nyc_output && rm coverage.lcov",
     "lint": "tslint --project tsconfig.json --config tslint.json",
-    "benchmark": "ts-node benchmark/index.ts"
+    "benchmark": "npm run build-dev && node built/benchmark/index.js",
+    "profile": "npm run build-dev && node built/benchmark/profile.js"
   },
   "nyc": {
     "per-file": true,
@@ -56,6 +58,7 @@
     "ts-node": "^3.3.0",
     "tslint": "^5.8.0",
     "tslint-config-standard": "^7.0.0",
-    "typescript": "^2.6.1"
+    "typescript": "^2.6.1",
+    "v8-profiler": "^5.7.0"
   }
 }

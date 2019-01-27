@@ -1,5 +1,5 @@
-var Row = require('../../../src/lib/row').default;
-var DataObject = require('../../../src/lib/data-object').default;
+var Row = require('../../../lib/row').default;
+var DataObject = require('../../../lib/data-object').default;
 
 describe('row', function () {
 

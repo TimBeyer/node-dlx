@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./built/lib",
+    "outDir": "./built/",
     "allowJs": true,
     "target": "es2017",
     "module": "commonjs",
@@ -16,6 +16,8 @@
     "noUnusedParameters": true
   },
   "include": [
-    "./src/**/*"
+    "./index.ts",
+    "./src/**/*",
+    "./benchmark/**/*"
   ]
 }

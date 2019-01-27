@@ -21,6 +21,7 @@
     "declarationDir": "./built/typings"
   },
   "include": [
-    "./src/**/*"
+    "./index.ts",
+    "./lib/**/*"
   ]
 }

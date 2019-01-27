@@ -1,5 +1,5 @@
-var Column = require('../../../src/lib/column').default;
-var DataObject = require('../../../src/lib/data-object').default;
+var Column = require('../../../lib/column').default;
+var DataObject = require('../../../lib/data-object').default;
 
 describe('column', function () {
 

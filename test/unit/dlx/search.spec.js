@@ -1,4 +1,4 @@
-var search = require('../../../src/index');
+var search = require('../../../index');
 
 describe('search', function () {
     describe('when searching for all solutions with mandatory constraints', function () {
