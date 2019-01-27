@@ -9,6 +9,31 @@ enum SearchState {
 }
 
 let searchMatrix = function searchMatrix (root: Column, limit: number = Infinity): Constraint[][] {
+  const objects: DataObject[] = []
+  const results: Constraint[][] = []
+
+  let searchState: SearchState = SearchState.ENTER_SEARCH
+  let stopped = false
+
+  let k = 0
+
+  let neighborStack: Column[] = []
+  let neighbor: Column
+
+  let currentColumnHeader: Column
+  let dataObject: DataObject
+
+  function recordResult () {
+    const result = []
+
+    for (let i = 0; i < k; i++) {
+      const o = objects[i]
+      result.push(o.data)
+    }
+
+    results.push(result)
+  }
+
   function chooseColumn () {
     let smallestColumn = root.right
     let currentColumn = root.right
@@ -23,34 +48,6 @@ let searchMatrix = function searchMatrix (root: Column, limit: number = Infinity
     return smallestColumn
   }
 
-  const objects: DataObject[] = []
-  const results: Constraint[][] = []
-  let searchState: SearchState = SearchState.ENTER_SEARCH
-
-  let stopped = false
-
-  let k = 0
-
-  let neighborStack: Column[] = []
-  let neighbor: Column
-
-  let currentColumnHeaderStack: Column[] = []
-  let currentColumnHeader: Column
-
-  let dataObjectStack: DataObject[] = []
-  let dataObject: DataObject
-
-  function recordResult () {
-    const result = []
-
-    for (let i = 0; i < k; i++) {
-      const o = objects[i]
-      result.push(o.data)
-    }
-
-    results.push(result)
-  }
-
   function initSearch () {
     currentColumnHeader = chooseColumn()
     dataObject = currentColumnHeader.down as DataObject
@@ -58,8 +55,6 @@ let searchMatrix = function searchMatrix (root: Column, limit: number = Infinity
   }
 
   function cover () {
-    objects[k] = dataObject as DataObject
-
     neighbor = dataObject.right
 
     while (neighbor !== dataObject) {
@@ -69,75 +64,86 @@ let searchMatrix = function searchMatrix (root: Column, limit: number = Infinity
   }
 
   function uncover () {
-    dataObject = objects[k]
-    currentColumnHeader = dataObject.columnHeader
-
     neighbor = neighbor.left
 
     while (neighbor !== dataObject) {
       neighbor.columnHeader.uncover()
       neighbor = neighbor.left
     }
-
-    dataObject = dataObject.down as DataObject
   }
 
   function pushState () {
     neighborStack.push(neighbor)
-    dataObjectStack.push(dataObject)
-    currentColumnHeaderStack.push(currentColumnHeader)
   }
 
   function popState () {
     neighbor = neighborStack.pop()
-    dataObject = dataObjectStack.pop()
-    currentColumnHeader = currentColumnHeaderStack.pop()
+  }
+
+  function enterSearch () {
+    const isSolution = root === root.right
+
+    if (isSolution) {
+      recordResult()
+
+      if (results.length === limit) {
+        stopped = true
+        return results
+      }
+
+      searchState = SearchState.GO_UP
+    } else {
+
+      initSearch()
+      searchState = SearchState.GO_DOWN
+    }
+  }
+
+  function goDown () {
+    if (dataObject !== currentColumnHeader) {
+      objects[k] = dataObject as DataObject
+
+      cover()
+      pushState()
+
+      k = k + 1
+
+      searchState = SearchState.ENTER_SEARCH
+    } else {
+      currentColumnHeader.uncover()
+      searchState = SearchState.GO_UP
+    }
+  }
+
+  function goUp () {
+    k = k - 1
+
+    if (k < 0) {
+      stopped = true
+      return results
+    }
+
+    popState()
+
+    dataObject = objects[k]
+
+    uncover()
+
+    dataObject = dataObject.down as DataObject
+    currentColumnHeader = dataObject.columnHeader
+
+    searchState = SearchState.GO_DOWN
   }
 
   while (!stopped) {
     if (searchState === SearchState.ENTER_SEARCH) {
-      const isSolution = root === root.right
-
-      if (isSolution) {
-        recordResult()
-
-        if (results.length === limit) {
-          stopped = true
-        }
-
-        searchState = SearchState.GO_UP
-      } else {
-
-        initSearch()
-        searchState = SearchState.GO_DOWN
-      }
+      enterSearch()
       continue
     } else if (searchState === SearchState.GO_DOWN) {
-      if (dataObject !== currentColumnHeader) {
-        cover()
-        pushState()
-        k = k + 1
-
-        searchState = SearchState.ENTER_SEARCH
-      } else {
-        currentColumnHeader.uncover()
-        searchState = SearchState.GO_UP
-      }
-
+      goDown()
       continue
     } else if (searchState === SearchState.GO_UP) {
-      k = k - 1
-
-      if (k < 0) {
-        stopped = true
-        continue
-      }
-
-      popState()
-      uncover()
-
-      searchState = SearchState.GO_DOWN
-
+      goUp()
       continue
     }
   }
