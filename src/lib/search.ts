@@ -2,34 +2,11 @@ import Column from './column'
 import DataObject from './data-object'
 import { Constraint } from './constraint'
 
-interface SearchState {
-  neighbor: Column
-  currentColumnHeader: Column
-  dataObject: DataObject
+enum SearchState {
+  'ENTER_SEARCH',
+  'GO_DOWN',
+  'GO_UP'
 }
-
-function cover (searchState: SearchState, dataObject: DataObject): void {
-  let neighbor = dataObject.right
-  while (neighbor !== dataObject) {
-    neighbor.columnHeader.cover()
-    neighbor = neighbor.right
-  }
-  searchState.neighbor = neighbor
-}
-
-function uncover (searchState: SearchState, dataObject: DataObject): void {
-
-  let neighbor = searchState.neighbor.left
-
-  while (neighbor !== dataObject) {
-    neighbor.columnHeader.uncover()
-    neighbor = neighbor.left
-  }
-
-  searchState.neighbor = neighbor
-}
-
-type SearchStates = ('enterSearch' | 'goDown' | 'goUp')
 
 let searchMatrix = function searchMatrix (root: Column, limit: number = Infinity): Constraint[][] {
   function chooseColumn () {
@@ -48,18 +25,25 @@ let searchMatrix = function searchMatrix (root: Column, limit: number = Infinity
 
   const objects: DataObject[] = []
   const results: Constraint[][] = []
-  let searchState: SearchStates = 'enterSearch'
+  let searchState: SearchState = SearchState.ENTER_SEARCH
 
   let stopped = false
 
   let k = 0
-  let stateStack: SearchState[] = []
-  let currentState: SearchState
+
+  let neighborStack: Column[] = []
+  let neighbor: Column
+
+  let currentColumnHeaderStack: Column[] = []
+  let currentColumnHeader: Column
+
+  let dataObjectStack: DataObject[] = []
+  let dataObject: DataObject
 
   mainLoop:
   while (!stopped) {
-    switch (searchState as SearchStates) {
-      case 'enterSearch': {
+    switch (searchState as SearchState) {
+      case SearchState.ENTER_SEARCH: {
         const isSolution = root === root.right
 
         if (isSolution) {
@@ -76,42 +60,41 @@ let searchMatrix = function searchMatrix (root: Column, limit: number = Infinity
             stopped = true
           }
 
-          searchState = 'goUp'
+          searchState = SearchState.GO_UP
         } else {
-          const currentColumnHeader = chooseColumn()
-          const dataObject = currentColumnHeader.down as DataObject
+          currentColumnHeader = chooseColumn()
+          dataObject = currentColumnHeader.down as DataObject
+          currentColumnHeader.cover()
 
-          currentState = {
-            neighbor: undefined,
-            currentColumnHeader,
-            dataObject
-          }
-
-          currentState.currentColumnHeader.cover()
-          searchState = 'goDown'
+          searchState = SearchState.GO_DOWN
         }
         continue mainLoop
       }
-      case 'goDown': {
-        if (currentState.dataObject !== currentState.currentColumnHeader) {
-          objects[k] = currentState.dataObject as DataObject
+      case SearchState.GO_DOWN: {
+        if (dataObject !== currentColumnHeader) {
+          objects[k] = dataObject as DataObject
 
-          cover(currentState, currentState.dataObject)
+          neighbor = dataObject.right
+
+          while (neighbor !== dataObject) {
+            neighbor.columnHeader.cover()
+            neighbor = neighbor.right
+          }
 
           k = k + 1
 
-          stateStack.push({
-            ...currentState
-          })
+          neighborStack.push(neighbor)
+          dataObjectStack.push(dataObject)
+          currentColumnHeaderStack.push(currentColumnHeader)
 
-          searchState = 'enterSearch'
+          searchState = SearchState.ENTER_SEARCH
         } else {
-          currentState.currentColumnHeader.uncover()
-          searchState = 'goUp'
+          currentColumnHeader.uncover()
+          searchState = SearchState.GO_UP
         }
         continue mainLoop
       }
-      case 'goUp': {
+      case SearchState.GO_UP: {
         k = k - 1
 
         if (k < 0) {
@@ -119,16 +102,22 @@ let searchMatrix = function searchMatrix (root: Column, limit: number = Infinity
           continue
         }
 
-        currentState = stateStack.pop()
+        neighbor = neighborStack.pop()
+        dataObject = dataObjectStack.pop()
+        currentColumnHeader = currentColumnHeaderStack.pop()
 
-        currentState.dataObject = objects[k]
-        currentState.currentColumnHeader = currentState.dataObject.columnHeader
+        dataObject = objects[k]
+        currentColumnHeader = dataObject.columnHeader
 
-        uncover(currentState, currentState.dataObject)
+        neighbor = neighbor.left
 
-        currentState.dataObject = currentState.dataObject.down as DataObject
+        while (neighbor !== dataObject) {
+          neighbor.columnHeader.uncover()
+          neighbor = neighbor.left
+        }
 
-        searchState = 'goDown'
+        dataObject = dataObject.down as DataObject
+        searchState = SearchState.GO_DOWN
 
         continue mainLoop
       }
