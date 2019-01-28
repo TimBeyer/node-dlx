@@ -1,4 +1,4 @@
-import { Column, Node, Row, Result } from './interfaces'
+import { Column, Node, Result, SearchConfig } from './interfaces'
 
 enum SearchState {
   FORWARD,
@@ -8,26 +8,27 @@ enum SearchState {
   DONE
 }
 
-export function search<T = any> (numSolutions, numPrimary, numSecondary, rows: Row<T>[]) {
+export function search<T> (config: SearchConfig<T>) {
+  const { numSolutions, numPrimary, numSecondary, rows } = config
   const root: Column = {} as Column
 
   const colArray = [root]
-  const nodeArray = []
-  const solutions: Result[][] = []
+  const nodeArray: Node<T>[] = []
+  const solutions: Result<T>[][] = []
 
   let currentSearchState: SearchState = SearchState.FORWARD
   let running = true
   let level = 0
-  let choice: Node[] = []
+  let choice: Node<T>[] = []
   let bestCol: Column
-  let currentNode: Node
+  let currentNode: Node<T>
 
   function readColumnNames () {
     // Skip root node
     let curColIndex = 1
 
     for (let i = 0; i < numPrimary; i++) {
-      const head: Node = {}
+      const head: Node<T> = {}
       head.up = head
       head.down = head
 
@@ -49,7 +50,7 @@ export function search<T = any> (numSolutions, numPrimary, numSecondary, rows: R
     root.prev = lastCol
 
     for (let i = 0; i < numSecondary; i++) {
-      const head: Node = {}
+      const head: Node<T> = {}
       head.up = head
       head.down = head
 
@@ -71,10 +72,10 @@ export function search<T = any> (numSolutions, numPrimary, numSecondary, rows: R
 
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i]
-      let rowStart: Node = undefined
+      let rowStart: Node<T> = undefined
 
       for (const columnIndex of row.coveredColumns) {
-        let node: Node = {}
+        let node: Node<T> = {}
         node.left = node
         node.right = node
         node.down = node

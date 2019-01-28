@@ -1,86 +1,20 @@
-import { Constraint, isComplexConstraint, isSimpleConstraint } from './lib/constraint'
+import { Constraint, SearchConfig } from './lib/interfaces'
 import { search } from './lib/index'
-import { binaryToSparseRow } from './lib/utils'
-import { Row } from './lib/interfaces'
 
-function getParams (constraint) {
-  let numPrimary: number = 0
-  let numSecondary: number = 0
+import { getSearchConfig } from './lib/utils'
 
-  if (isSimpleConstraint(constraint)) {
-    numPrimary = constraint.row.length
-  } else if (isComplexConstraint(constraint)) {
-    numPrimary = constraint.primaryRow.length
-    numSecondary = constraint.secondaryRow.length
-  }
-
-  return {
-    numPrimary,
-    numSecondary
-  }
-}
-const findAll = function (constraints: Constraint[]) {
-  const { numPrimary, numSecondary } = getParams(constraints[0])
-  const sparseConstraints: Row<any>[] = constraints.map((c) => {
-    const data = c.data
-    let coveredColumns: number[]
-    if (isSimpleConstraint(c)) {
-      coveredColumns = binaryToSparseRow(c.row)
-    } else if (isComplexConstraint(c)) {
-      coveredColumns = binaryToSparseRow(c.primaryRow).concat(binaryToSparseRow(c.secondaryRow, numPrimary))
-    }
-
-    return {
-      data,
-      coveredColumns
-    }
-  })
-
-  return search(Infinity, numPrimary, numSecondary, sparseConstraints)
+export function findAll<T = any> (constraints: Constraint<T>[]) {
+  return search<T>(getSearchConfig(Infinity, constraints))
 }
 
-const findOne = function (constraints: Constraint[]) {
-  const { numPrimary, numSecondary } = getParams(constraints[0])
-  const sparseConstraints: Row<any>[] = constraints.map((c) => {
-    const data = c.data
-    let coveredColumns: number[]
-    if (isSimpleConstraint(c)) {
-      coveredColumns = binaryToSparseRow(c.row)
-    } else if (isComplexConstraint(c)) {
-      coveredColumns = binaryToSparseRow(c.primaryRow).concat(binaryToSparseRow(c.secondaryRow, numPrimary))
-    }
-
-    return {
-      data,
-      coveredColumns
-    }
-  })
-
-  return search(1, numPrimary, numSecondary, sparseConstraints)
+export function findOne<T = any> (constraints: Constraint<T>[]) {
+  return search<T>(getSearchConfig(1, constraints))
 }
 
-const find = function (constraints: Constraint[], numSolutions: number) {
-  const { numPrimary, numSecondary } = getParams(constraints[0])
-  const sparseConstraints: Row<any>[] = constraints.map((c) => {
-    const data = c.data
-    let coveredColumns: number[]
-    if (isSimpleConstraint(c)) {
-      coveredColumns = binaryToSparseRow(c.row)
-    } else if (isComplexConstraint(c)) {
-      coveredColumns = binaryToSparseRow(c.primaryRow).concat(binaryToSparseRow(c.secondaryRow, numPrimary))
-    }
-
-    return {
-      data,
-      coveredColumns
-    }
-  })
-
-  return search(numSolutions, numPrimary, numSecondary, sparseConstraints)
+export function find<T = any> (constraints: Constraint<T>[], numSolutions: number) {
+  return search<T>(getSearchConfig(numSolutions, constraints))
 }
 
-export {
-  findOne,
-  findAll,
-  find
+export function findRaw<T = any> (config: SearchConfig<T>) {
+  return search<T>(config)
 }
