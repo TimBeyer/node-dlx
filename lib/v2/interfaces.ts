@@ -4,6 +4,7 @@ export interface Node {
   up?: Node
   down?: Node
   col?: Column
+  index?: number
 }
 
 export interface Column {
