@@ -1,11 +1,11 @@
 export interface SimpleConstraint<T = any> {
-  row: number[],
+  row: (1 | 0)[],
   data: T
 }
 
 export interface ComplexConstraint<T = any> {
-  primaryRow: number[]
-  secondaryRow: number[],
+  primaryRow: (1 | 0)[]
+  secondaryRow: (1 | 0)[],
   data: T
 }
 

@@ -1,14 +1,26 @@
-import { Column, Node } from './interfaces'
+import { Column, Node, Row, Result } from './interfaces'
 
-export function search (numSolutions, numPrimary, numSecondary, rows: number[][]) {
-  const root: Column = {
-    name: 'ROOT'
-  } as Column
+enum SearchState {
+  FORWARD,
+  ADVANCE,
+  BACKUP,
+  RECOVER,
+  DONE
+}
+
+export function search<T = any> (numSolutions, numPrimary, numSecondary, rows: Row<T>[]) {
+  const root: Column = {} as Column
 
   const colArray = [root]
   const nodeArray = []
+  const solutions: Result[][] = []
 
-  const solutions: number[][] = []
+  let currentSearchState: SearchState = SearchState.FORWARD
+  let running = true
+  let level = 0
+  let choice: Node[] = []
+  let bestCol: Column
+  let currentNode: Node
 
   function readColumnNames () {
     // Skip root node
@@ -20,7 +32,6 @@ export function search (numSolutions, numPrimary, numSecondary, rows: number[][]
       head.down = head
 
       const column: Column = {
-        name: `P${i}`,
         len: 0,
         head
       }
@@ -43,7 +54,6 @@ export function search (numSolutions, numPrimary, numSecondary, rows: number[][]
       head.down = head
 
       const column: Column = {
-        name: `S${i}`,
         head,
         len: 0
       }
@@ -63,13 +73,14 @@ export function search (numSolutions, numPrimary, numSecondary, rows: number[][]
       const row = rows[i]
       let rowStart: Node = undefined
 
-      for (const columnIndex of row) {
+      for (const columnIndex of row.coveredColumns) {
         let node: Node = {}
         node.left = node
         node.right = node
         node.down = node
         node.up = node
         node.index = i
+        node.data = row.data
 
         nodeArray[curNodeIndex] = node
 
@@ -101,25 +112,6 @@ export function search (numSolutions, numPrimary, numSecondary, rows: number[][]
       nodeArray[curNodeIndex - 1].right = rowStart
     }
   }
-
-  readColumnNames()
-
-  readRows()
-
-  enum SearchState {
-    FORWARD,
-    ADVANCE,
-    BACKUP,
-    RECOVER,
-    DONE
-  }
-
-  let currentSearchState: SearchState = SearchState.FORWARD
-  let running = true
-  let level = 0
-  let choice: Node[] = []
-  let bestCol: Column
-  let currentNode: Node
 
   function cover (c: Column) {
     const l = c.prev
@@ -191,12 +183,16 @@ export function search (numSolutions, numPrimary, numSecondary, rows: number[][]
   }
 
   function recordSolution () {
-    let indexes = []
+    let results: Result<T>[] = []
     for (let l = 0; l <= level; l++) {
-      indexes.push(choice[l].index)
+      const node = choice[l]
+      results.push({
+        index: node.index,
+        data: node.data
+      })
     }
 
-    solutions.push(indexes)
+    solutions.push(results)
   }
 
   function advance () {
@@ -259,6 +255,9 @@ export function search (numSolutions, numPrimary, numSecondary, rows: number[][]
     [SearchState.RECOVER]: recover,
     [SearchState.DONE]: done
   }
+
+  readColumnNames()
+  readRows()
 
   while (running) {
     const currentStateMethod = stateMethods[currentSearchState]
