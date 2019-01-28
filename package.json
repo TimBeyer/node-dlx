@@ -24,8 +24,8 @@
   "nyc": {
     "per-file": true,
     "include": [
-      "src/**/*.js",
-      "src/**/*.ts"
+      "index.ts",
+      "lib/**/*.ts"
     ],
     "exclude": [
       "test/**/*.spec.js",
