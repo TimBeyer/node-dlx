@@ -1,6 +1,5 @@
 import { Pentomino, NUM_PENTOMINOS, ALL_PENTOMINOS } from './pentomino'
-import { SimpleConstraint } from '../../src/lib/constraint'
-import { chunk } from 'lodash'
+import { SimpleConstraint } from '../../lib/interfaces'
 
 function times<T> (n: number, fn: () => T): T[] {
   const returnValue: T[] = []
@@ -56,10 +55,10 @@ export class Field {
 
   constraintFor (x: number, y: number, p: Pentomino): SimpleConstraint<PlacedPentomino> {
     // Ensure we can only place one per type including rotations
-    const typeConstraint = times(NUM_PENTOMINOS, constant(0))
+    const typeConstraint = times(NUM_PENTOMINOS, constant(0)) as (1 | 0)[]
     typeConstraint[p.type] = 1
 
-    const placeConstraint = times(this.width * this.height, constant(0))
+    const placeConstraint = times(this.width * this.height, constant(0)) as (1 | 0)[]
 
     for (let xBoard = 0; xBoard < this.width; xBoard++) {
       for (let yBoard = 0; yBoard < this.height; yBoard++) {
@@ -77,7 +76,6 @@ export class Field {
       }
     }
 
-    console.log([...typeConstraint, ...placeConstraint].length)
     return {
       data: {
         p, x, y
@@ -132,9 +130,7 @@ export class Field {
       }
     }
 
-    let result = chunk(printOut, this.width)
-
-    console.log(result.join('\n'))
+    console.log(printOut.join('\n'))
   }
 }
 
@@ -143,28 +139,14 @@ const FIELD_HEIGHT = 10
 
 const field = new Field(FIELD_WIDTH, FIELD_HEIGHT)
 
-const allConstraints = []
+export const ALL_CONSTRAINTS: SimpleConstraint<PlacedPentomino>[] = []
 
 for (const p of ALL_PENTOMINOS) {
   for (let x = 0; x < FIELD_WIDTH; x++) {
     for (let y = 0; y < FIELD_HEIGHT; y++) {
       if (field.canPlace(x, y, p)) {
-        // field.printAt(x, y, p)
-        allConstraints.push(field.constraintFor(x, y, p))
+        ALL_CONSTRAINTS.push(field.constraintFor(x, y, p))
       }
     }
   }
 }
-
-console.log(`Num Constraints: ${allConstraints.length}`)
-import { findOne, findAll } from '../../src'
-
-const result = findOne(allConstraints)
-
-for (const { data } of result) {
-  const p = data as PlacedPentomino
-  field.place(p.x, p.y, p.p)
-}
-
-field.print()
-console.log(findAll(allConstraints).length)

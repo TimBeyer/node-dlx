@@ -10,7 +10,7 @@ enum SearchState {
 
 export function search<T> (config: SearchConfig<T>) {
   const { numSolutions, numPrimary, numSecondary, rows } = config
-  const root: Column = {} as Column
+  const root: Column<T> = {} as Column<T>
 
   const colArray = [root]
   const nodeArray: Node<T>[] = []
@@ -20,7 +20,7 @@ export function search<T> (config: SearchConfig<T>) {
   let running = true
   let level = 0
   let choice: Node<T>[] = []
-  let bestCol: Column
+  let bestCol: Column<T>
   let currentNode: Node<T>
 
   function readColumnNames () {
@@ -32,7 +32,7 @@ export function search<T> (config: SearchConfig<T>) {
       head.up = head
       head.down = head
 
-      const column: Column = {
+      const column: Column<T> = {
         len: 0,
         head
       }
@@ -54,7 +54,7 @@ export function search<T> (config: SearchConfig<T>) {
       head.up = head
       head.down = head
 
-      const column: Column = {
+      const column: Column<T> = {
         head,
         len: 0
       }
@@ -105,16 +105,12 @@ export function search<T> (config: SearchConfig<T>) {
         curNodeIndex = curNodeIndex + 1
       }
 
-      if (!rowStart) {
-        throw new Error('Empty row')
-      }
-
       rowStart.left = nodeArray[curNodeIndex - 1]
       nodeArray[curNodeIndex - 1].right = rowStart
     }
   }
 
-  function cover (c: Column) {
+  function cover (c: Column<T>) {
     const l = c.prev
     const r = c.next
 
@@ -136,7 +132,7 @@ export function search<T> (config: SearchConfig<T>) {
     }
   }
 
-  function uncover (c: Column) {
+  function uncover (c: Column<T>) {
     // From bottom to top, right to left relink every row node to its column
     for (let rr = c.head.up; rr !== c.head; rr = rr.up) {
       for (let nn = rr.left; nn !== rr; nn = nn.left) {
