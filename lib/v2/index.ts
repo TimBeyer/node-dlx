@@ -1,45 +1,6 @@
 import { Column, Node } from './interfaces'
 
-function printState (choice, level: number) {
-  let indexes = []
-  for (let l = 0; l <= level; l++) {
-    indexes.push(choice[l].index)
-  }
-
-  console.log(indexes.join(', '))
-}
-
-export enum Verbosity {
-  SILENT,
-  SOLUTIONS,
-  PARTIAL
-}
-
-const primaryColumnNames = [
-  'A', 'B', 'C'
-]
-
-const secondaryColumnNames = [
-  // 'x'
-]
-
-const rows = [
-  [0],
-  [1],
-  [2],
-  [0, 2]
-]
-
-export function search<T> (primaryColumnNames, secondaryColumnNames, rows: number[][]) {
-  const verbosity = Verbosity.PARTIAL
-  // number of solutions found
-  let count = 0
-  // how many times we deleted a list element
-  let updates = 0
-  // How often we log results
-  let spacing = 1
-
-  // TODO: Remove cast if possible or adapt interface
+export function search (numSolutions, numPrimary, numSecondary, rows: number[][]) {
   const root: Column = {
     name: 'ROOT'
   } as Column
@@ -47,17 +8,19 @@ export function search<T> (primaryColumnNames, secondaryColumnNames, rows: numbe
   const colArray = [root]
   const nodeArray = []
 
+  const solutions: number[][] = []
+
   function readColumnNames () {
     // Skip root node
     let curColIndex = 1
 
-    for (const primaryColumnName of primaryColumnNames) {
+    for (let i = 0; i < numPrimary; i++) {
       const head: Node = {}
       head.up = head
       head.down = head
 
       const column: Column = {
-        name: primaryColumnName,
+        name: `P${i}`,
         len: 0,
         head
       }
@@ -74,13 +37,13 @@ export function search<T> (primaryColumnNames, secondaryColumnNames, rows: numbe
     lastCol.next = root
     root.prev = lastCol
 
-    for (const name of secondaryColumnNames) {
+    for (let i = 0; i < numSecondary; i++) {
       const head: Node = {}
       head.up = head
       head.down = head
 
       const column: Column = {
-        name,
+        name: `S${i}`,
         head,
         len: 0
       }
@@ -227,6 +190,15 @@ export function search<T> (primaryColumnNames, secondaryColumnNames, rows: numbe
     currentSearchState = SearchState.ADVANCE
   }
 
+  function recordSolution () {
+    let indexes = []
+    for (let l = 0; l <= level; l++) {
+      indexes.push(choice[l].index)
+    }
+
+    solutions.push(indexes)
+  }
+
   function advance () {
     if (currentNode === bestCol.head) {
       currentSearchState = SearchState.BACKUP
@@ -238,10 +210,12 @@ export function search<T> (primaryColumnNames, secondaryColumnNames, rows: numbe
     }
 
     if (root.next === root) {
-      console.log('Solution')
-      printState(choice, level)
-      console.log('\n')
-      currentSearchState = SearchState.RECOVER
+      recordSolution()
+      if (solutions.length === numSolutions) {
+        currentSearchState = SearchState.DONE
+      } else {
+        currentSearchState = SearchState.RECOVER
+      }
       return
     }
 
@@ -275,7 +249,6 @@ export function search<T> (primaryColumnNames, secondaryColumnNames, rows: numbe
   }
 
   function done () {
-    console.log('Done')
     running = false
   }
 
@@ -291,6 +264,6 @@ export function search<T> (primaryColumnNames, secondaryColumnNames, rows: numbe
     const currentStateMethod = stateMethods[currentSearchState]
     currentStateMethod()
   }
-}
 
-search(primaryColumnNames, secondaryColumnNames, rows)
+  return solutions
+}
