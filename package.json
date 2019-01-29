@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "built/lib/index.js",
+  "types": "built/typings/index.d.ts",
   "directories": {
     "test": "test"
   },
@@ -13,7 +14,7 @@
     "prepare": "npm run build",
     "test": "npm run test-unit",
     "test-watch": "npm run test-unit -- --watch",
-    "test-unit": "NODE_ENV=test mocha --require ts-node/register 'test/unit/**/*.spec.js' 'test/unit/**/*.spec.ts'",
+    "test-unit": "NODE_ENV=test mocha --require ts-node/register 'test/unit/**/*.spec.ts'",
     "cover": "nyc npm run test-unit",
     "coverage": "npm run cover && nyc report --reporter=text-lcov > coverage.lcov",
     "coverage-report": "npm run coverage && codecov && rm -rf ./nyc_output && rm coverage.lcov",
@@ -28,12 +29,9 @@
       "lib/**/*.ts"
     ],
     "exclude": [
-      "test/**/*.spec.js",
       "test/**/*.spec.ts",
-      "test/**/*.js",
       "test/**/*.ts",
-      "node_modules/**/*.js",
-      "node_modules/**/*.ts"
+      "node_modules/**/*"
     ],
     "extension": [
       ".ts"
