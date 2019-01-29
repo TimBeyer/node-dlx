@@ -1,6 +1,6 @@
 {
   "name": "dancing-links",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "built/lib/index.js",
   "types": "built/typings/index.d.ts",
