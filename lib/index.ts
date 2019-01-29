@@ -1,3 +1,12 @@
+/**
+ * Knuth's Dancing Links
+ * Original paper: https://arxiv.org/pdf/cs/0011047.pdf
+ * Implementation ported from: https://github.com/shreevatsa/knuth-literate-programs/blob/master/programs/dance.pdf
+ *
+ * Code runs in a state machine in order to avoid recursion
+ * and in order to work around the lack of `goto` in JS
+ */
+
 import { Column, Node, Result, SearchConfig } from './interfaces'
 
 enum SearchState {
