@@ -19,8 +19,8 @@
     "coverage": "npm run cover && nyc report --reporter=text-lcov > coverage.lcov",
     "coverage-report": "npm run coverage && codecov && rm -rf ./nyc_output && rm coverage.lcov",
     "lint": "tslint --project tsconfig.json --config tslint.json",
-    "benchmark": "npm run build-dev && node built/benchmark/index.js",
-    "profile": "npm run build-dev && node built/benchmark/profile.js"
+    "benchmark": "npm run build-dev && node built/lib/benchmark/index.js",
+    "profile": "npm run build-dev && node built/lib/benchmark/profile.js"
   },
   "nyc": {
     "per-file": true,
