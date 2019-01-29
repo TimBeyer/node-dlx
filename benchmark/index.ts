@@ -15,9 +15,9 @@ function benchmarkOneTiling () {
 
   const suite = new Benchmark.Suite()
 
-  suite.add('node-dlx findOne', function () {
+  suite.add('dancing-links findOne', function () {
     find(ALL_CONSTRAINTS, 1)
-  }).add('node-dlx findRaw', function () {
+  }).add('dancing-links findRaw', function () {
     findRaw(searchConfig)
   }).add('dlxlib', function () {
     dlxlib.solve(dlxlibConstraints, null, null, 1)
@@ -42,9 +42,9 @@ function benchmarkTenTilings () {
 
   const suite = new Benchmark.Suite()
 
-  suite.add('node-dlx findOne', function () {
+  suite.add('dancing-links findOne', function () {
     find(ALL_CONSTRAINTS, 10)
-  }).add('node-dlx findRaw', function () {
+  }).add('dancing-links findRaw', function () {
     findRaw(searchConfig)
   }).add('dlxlib', function () {
     dlxlib.solve(dlxlibConstraints, null, null, 10)
@@ -61,5 +61,33 @@ function benchmarkTenTilings () {
   }).run()
 }
 
+function benchmarkHundredTilings () {
+  console.log('Benchmark: Finding one hundred pentomino tilings on a 6x10 field\n')
+
+  const dlxlibConstraints = ALL_CONSTRAINTS.map((constraint) => constraint.row)
+  const searchConfig = getSearchConfig(100, ALL_CONSTRAINTS)
+
+  const suite = new Benchmark.Suite()
+
+  suite.add('dancing-links findOne', function () {
+    find(ALL_CONSTRAINTS, 100)
+  }).add('dancing-links findRaw', function () {
+    findRaw(searchConfig)
+  }).add('dlxlib', function () {
+    dlxlib.solve(dlxlibConstraints, null, null, 100)
+  }).add('dance', function () {
+    dance.solve(dlxlibConstraints, {
+      maxSolutions: 100
+    })
+  })
+    .on('cycle', function (event) {
+      console.log(String(event.target))
+    })
+    .on('complete', function () {
+      console.log('\nFastest is ' + this.filter('fastest').map('name') + '\n\n')
+    }).run()
+}
+
 benchmarkOneTiling()
 benchmarkTenTilings()
+benchmarkHundredTilings()
