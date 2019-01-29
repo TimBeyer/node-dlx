@@ -20,9 +20,26 @@ jobs:
           name: Unit Tests
           command: |
             npm run coverage-report
+  build:
+    parallelism: 1
+    docker:
+      - image: node:10
+        environment:
+          NPM_CONFIG_PROGRESS: false
+          NPM_CONFIG_LOGLEVEL: warn
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Build
+          command: |
+            npm run build
 
 workflows:
   version: 2
   test-and-cover:
     jobs:
       - test
+      - build
