@@ -3,7 +3,7 @@
 ## About
 
 This is an implementation of Knuth's DLX to solve the exact cover problem.
-It is a port of [Knuth's literate dancing links implementation](https://cs.stanford.edu/~knuth/programs/dance.w) and supports primary and secondary constraints, and returning custom data instead of pure row indices.
+It is a port of [Knuth's literate dancing links implementation](https://cs.stanford.edu/~knuth/programs/dance.w) and supports primary and secondary constraints, and returning custom data in addition to row indices.
 
 There are no external dependencies and there is full typescript support.
 
@@ -154,3 +154,9 @@ dance x 1.08 ops/sec ±0.87% (7 runs sampled)
 
 Fastest is dancing-links findRaw
 ```
+
+## Profiling
+
+You can generate a CPU profile of the algorithm using `npm run benchmark`.
+It will create a file called `profile.cpuprofile` which you can then load into the Chrome inspector.
+To do this, you will need to install the optional dependency `v8-profiler`.
