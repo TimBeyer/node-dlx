@@ -15,7 +15,7 @@ function benchmarkOneTiling () {
 
   const suite = new Benchmark.Suite()
 
-  suite.add('dancing-links findOne', function () {
+  suite.add('dancing-links find', function () {
     find(ALL_CONSTRAINTS, 1)
   }).add('dancing-links findRaw', function () {
     findRaw(searchConfig)
@@ -42,7 +42,7 @@ function benchmarkTenTilings () {
 
   const suite = new Benchmark.Suite()
 
-  suite.add('dancing-links findOne', function () {
+  suite.add('dancing-links find', function () {
     find(ALL_CONSTRAINTS, 10)
   }).add('dancing-links findRaw', function () {
     findRaw(searchConfig)
@@ -69,7 +69,7 @@ function benchmarkHundredTilings () {
 
   const suite = new Benchmark.Suite()
 
-  suite.add('dancing-links findOne', function () {
+  suite.add('dancing-links find', function () {
     find(ALL_CONSTRAINTS, 100)
   }).add('dancing-links findRaw', function () {
     findRaw(searchConfig)

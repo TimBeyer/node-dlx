@@ -137,7 +137,7 @@ Fastest is dancing-links findRaw
 
 Benchmark: Finding ten pentomino tilings on a 6x10 field
 
-dancing-links findOne x 37.41 ops/sec ±3.40% (52 runs sampled)
+dancing-links find x 37.41 ops/sec ±3.40% (52 runs sampled)
 dancing-links findRaw x 39.29 ops/sec ±3.56% (52 runs sampled)
 dlxlib x 11.15 ops/sec ±3.48% (32 runs sampled)
 dance x 7.05 ops/sec ±3.89% (23 runs sampled)
@@ -147,7 +147,7 @@ Fastest is dancing-links findRaw
 
 Benchmark: Finding one hundred pentomino tilings on a 6x10 field
 
-dancing-links findOne x 5.28 ops/sec ±9.90% (18 runs sampled)
+dancing-links find x 5.28 ops/sec ±9.90% (18 runs sampled)
 dancing-links findRaw x 5.56 ops/sec ±2.41% (18 runs sampled)
 dlxlib x 1.63 ops/sec ±1.08% (9 runs sampled)
 dance x 1.08 ops/sec ±0.87% (7 runs sampled)
@@ -160,3 +160,8 @@ Fastest is dancing-links findRaw
 You can generate a CPU profile of the algorithm using `npm run benchmark`.
 It will create a file called `profile.cpuprofile` which you can then load into the Chrome inspector.
 To do this, you will need to install the optional dependency `v8-profiler`.
+
+## Examples
+
+The [benchmark directory](https://github.com/TimBeyer/node-dlx/tree/master/benchmark) implements encoders for the n-queens and pentomino tiling problems.  
+They aren't very optimized (the pentomino tiling does not consider symmetries) but you can use them as examples for how to encode your constraints for the library.
