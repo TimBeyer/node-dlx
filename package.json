@@ -1,36 +1,37 @@
 {
   "name": "dancing-links",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
-  "main": "built/index.js",
+  "main": "built/lib/index.js",
+  "types": "built/typings/index.d.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "clean": "rimraf built",
-    "build": "npm run clean && tsc -p .",
+    "build": "npm run clean && tsc -p tsconfig.release.json",
+    "build-dev": "npm run clean && tsc -p tsconfig.dev.json",
     "prepare": "npm run build",
     "test": "npm run test-unit",
     "test-watch": "npm run test-unit -- --watch",
-    "test-unit": "NODE_ENV=test mocha --require ts-node/register 'test/unit/**/*.spec.js' 'test/unit/**/*.spec.ts'",
+    "test-unit": "NODE_ENV=test mocha --require ts-node/register 'test/unit/**/*.spec.ts'",
     "cover": "nyc npm run test-unit",
     "coverage": "npm run cover && nyc report --reporter=text-lcov > coverage.lcov",
     "coverage-report": "npm run coverage && codecov && rm -rf ./nyc_output && rm coverage.lcov",
-    "lint": "tslint --project tsconfig.json --config tslint.json"
+    "lint": "tslint --project tsconfig.release.json --config tslint.json",
+    "benchmark": "npm run build-dev && node built/lib/benchmark/index.js",
+    "profile": "npm run build-dev && node built/lib/benchmark/profile.js"
   },
   "nyc": {
     "per-file": true,
     "include": [
-      "src/**/*.js",
-      "src/**/*.ts"
+      "index.ts",
+      "lib/**/*.ts"
     ],
     "exclude": [
-      "test/**/*.spec.js",
       "test/**/*.spec.ts",
-      "test/**/*.js",
       "test/**/*.ts",
-      "node_modules/**/*.js",
-      "node_modules/**/*.ts"
+      "node_modules/**/*"
     ],
     "extension": [
       ".ts"
@@ -40,21 +41,26 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "lodash": "^4.17.4"
+  "dependencies": {},
+  "optionalDependencies": {
+    "v8-profiler": "^5.7.0"
   },
   "devDependencies": {
+    "@types/benchmark": "^1.0.31",
     "@types/chai": "^4.0.4",
-    "@types/lodash": "^4.14.85",
     "@types/mocha": "^2.2.44",
-    "chai": "^2.3.0",
-    "codecov": "^3.0.0",
+    "@types/node": "^10.12.18",
+    "benchmark": "^2.1.4",
+    "chai": "^4.2.0",
+    "codecov": "^3.1.0",
+    "dance": "^0.1.0",
+    "dlxlib": "^1.0.3",
     "mocha": "^5.0.0",
-    "nyc": "^11.3.0",
+    "nyc": "^13.1.0",
     "rimraf": "^2.6.2",
     "ts-node": "^3.3.0",
-    "tslint": "^5.8.0",
-    "tslint-config-standard": "^7.0.0",
-    "typescript": "^2.6.1"
+    "tslint": "^5.12.1",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.2.4"
   }
 }

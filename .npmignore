@@ -1,0 +1,11 @@
+benchmark/
+lib/
+index.ts
+test/
+tsconfig.dev.json
+tsconfig.release.json
+tslint.json
+.circleci
+.nyc_output/
+profile.cpuprofile
+coverage.lcov

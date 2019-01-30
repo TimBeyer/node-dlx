@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "./built/lib",
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": [
+      "es2015",
+      "es2016",
+      "es2017",
+      "esnext"
+    ],
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "declaration": true,
+    "declarationDir": "./built/typings"
+  },
+  "include": [
+    "./index.ts",
+    "./lib/**/*"
+  ]
+}
