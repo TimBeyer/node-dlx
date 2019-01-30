@@ -1,12 +1,19 @@
 {
   "name": "dancing-links",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "",
   "main": "built/lib/index.js",
   "types": "built/typings/index.d.ts",
   "directories": {
     "test": "test"
   },
+  "keywords": [
+    "dlx",
+    "dancing links",
+    "algorithm x",
+    "exact cover",
+    "knuth"
+  ],
   "scripts": {
     "clean": "rimraf built",
     "build": "npm run clean && tsc -p tsconfig.release.json",
