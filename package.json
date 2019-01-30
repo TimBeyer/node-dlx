@@ -1,7 +1,17 @@
 {
   "name": "dancing-links",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Fastest JS solver for exact cover problems using Dancing Links",
+  "author": "Tim Beyer",
+  "license": "MIT",
+  "homepage": "https://github.com/TimBeyer/node-dlx",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TimBeyer/node-dlx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TimBeyer/node-dlx/issues"
+  },
   "main": "built/lib/index.js",
   "types": "built/typings/index.d.ts",
   "directories": {
@@ -46,8 +56,6 @@
     "all": true,
     "sourceMap": true
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {},
   "devDependencies": {
     "@types/benchmark": "^1.0.31",
