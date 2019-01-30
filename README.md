@@ -13,10 +13,10 @@ It is currently [the fastest](#benchmarks) Dancing Links implementation in JS.
 
 ```javascript
 
-var dlx = require('dancing-links');
+const dlx = require('dancing-links')
 
 // Simple case
-var constraints = [
+const constraints = [
     {
         data: 'first one',
         row: [1,0]
@@ -29,9 +29,9 @@ var constraints = [
         data: 'third one',
         row: [0,1]
     }
-];
+]
 
-var oneSolution = dlx.findOne(constraints);
+const oneSolution = dlx.findOne(constraints)
 /**
  * [{
  *      data: 'first one',
@@ -43,7 +43,7 @@ var oneSolution = dlx.findOne(constraints);
  *  }]
  */
 
-var allSolutions = dlx.findAll(constraints);
+const allSolutions = dlx.findAll(constraints)
 /**
  * [[{
  *      data: 'first one',
@@ -65,7 +65,7 @@ var allSolutions = dlx.findAll(constraints);
 
 // Secondary constraints
 
-var constraints = [
+const constraints = [
     {
         data: 'first one',
         primaryRow: [1,0],
@@ -81,9 +81,9 @@ var constraints = [
         primaryRow: [0,1],
         secondaryRow: [1]
     }
-];
+]
 
-var oneSolution = dlx.findOne(constraints);
+const oneSolution = dlx.findOne(constraints)
 /**
  * [{
  *      data: 'first one',
@@ -95,7 +95,7 @@ var oneSolution = dlx.findOne(constraints);
  *  }]
  */
 
-var allSolutions = dlx.findAll(constraints);
+const allSolutions = dlx.findAll(constraints)
 /**
  * 
  * Not the best example, but for brevity's sake believe me that it works as intended.
