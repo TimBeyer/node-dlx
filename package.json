@@ -1,6 +1,6 @@
 {
   "name": "dancing-links",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "",
   "main": "built/lib/index.js",
   "types": "built/typings/index.d.ts",
@@ -42,9 +42,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {},
-  "optionalDependencies": {
-    "v8-profiler": "^5.7.0"
-  },
   "devDependencies": {
     "@types/benchmark": "^1.0.31",
     "@types/chai": "^4.0.4",
