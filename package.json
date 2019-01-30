@@ -1,7 +1,7 @@
 {
   "name": "dancing-links",
-  "version": "2.0.2",
-  "description": "",
+  "version": "2.0.3",
+  "description": "Fastest JS solver for exact cover problems using Dancing Links",
   "main": "built/lib/index.js",
   "types": "built/typings/index.d.ts",
   "directories": {
