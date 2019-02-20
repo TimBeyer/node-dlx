@@ -1,10 +1,8 @@
 import { SimpleConstraint, Row, Result } from '../../lib/interfaces'
 
-import { find, findRaw } from '../..'
-
 type MultiConstraint<T> = SimpleConstraint<T> & Row<T>
 
-interface SudokuInput {
+export interface SudokuInput {
   number: number
   rowIndex: number
   colIndex: number
@@ -20,7 +18,7 @@ function times<T> (n: number, fn: () => T): T[] {
   return returnValue
 }
 
-function generateConstraints (size = 9, inputs: SudokuInput[] = []): MultiConstraint<SudokuInput>[] {
+export function generateConstraints (size = 9, inputs: SudokuInput[] = []): MultiConstraint<SudokuInput>[] {
   const blockSize = Math.sqrt(size)
   // each of the numbers can be in any x|y just once
   const numRowColConstraints = size * size
@@ -89,12 +87,13 @@ function generateConstraints (size = 9, inputs: SudokuInput[] = []): MultiConstr
   return constraints
 }
 
-function printBoard (size = 9, inputs: SudokuInput[]): string {
-  const rows: string[][] = times(size, () => times(size, () => ' '))
+export function printBoard (size = 9, inputs: SudokuInput[]): string {
+  const rows: string[][] = times(size, () => times(size, () => '.'))
 
   for (let x = 0; x < size; x++) {
     for (let y = 0; y < size; y++) {
-      rows[y][x] = String(inputs.find((input) => input.colIndex === x && input.rowIndex === y).number)
+      const field = inputs.find((input) => input.colIndex === x && input.rowIndex === y)
+      rows[y][x] = String((field && field.number) || '.')
     }
   }
 
@@ -104,7 +103,7 @@ function printBoard (size = 9, inputs: SudokuInput[]): string {
   return board
 }
 
-function parseStringFormat (size = 9, dotFormat: string) {
+export function parseStringFormat (size = 9, dotFormat: string) {
   const inputs: SudokuInput[] = []
 
   for (let row = 0; row < size; row++) {
@@ -124,8 +123,6 @@ function parseStringFormat (size = 9, dotFormat: string) {
   return inputs
 }
 
-function logResults (size = 9, results: Result<SudokuInput>[][]) {
+export function logResults (size = 9, results: Result<SudokuInput>[][]) {
   console.log(results.map((s) => s.map((c) => c.data)).map((s) => printBoard(size, s)).join('\n\n'))
 }
-
-logResults(9, find(generateConstraints(9, parseStringFormat(9, '000004009050120000000000085009076400020080306005400000090000100000090007060032900')), 5))

@@ -126,31 +126,51 @@ The benchmarks were done against [dlxlib](https://github.com/taylorjg/dlxlibjs) 
 You can run them with `npm run benchmark`
 
 ```
+Benchmark: A solution to the sodoku
+
+.|.|.|.|.|.|.|.|.
+.|.|.|.|.|3|.|8|5
+.|.|1|.|2|.|.|.|.
+.|.|.|5|.|7|.|.|.
+.|.|4|.|.|.|1|.|.
+.|9|.|.|.|.|.|.|.
+5|.|.|.|.|.|.|7|3
+.|.|2|.|1|.|.|.|.
+.|.|.|.|4|.|.|.|9
+
+dancing-links find x 2,247 ops/sec ±2.19% (89 runs sampled)
+dancing-links findRaw x 4,975 ops/sec ±1.59% (93 runs sampled)
+dlxlib x 390 ops/sec ±1.04% (88 runs sampled)
+dance x 400 ops/sec ±0.75% (87 runs sampled)
+dancing-links-algorithm x 447 ops/sec ±1.50% (86 runs sampled)
+Fastest is dancing-links findRaw
+
+
 Benchmark: Finding one pentomino tiling on a 6x10 field
 
-dancing-links findOne x 210 ops/sec ±8.36% (80 runs sampled)
-dancing-links findRaw x 247 ops/sec ±2.36% (84 runs sampled)
-dlxlib x 69.08 ops/sec ±2.35% (72 runs sampled)
-dance x 35.40 ops/sec ±2.66% (63 runs sampled)
+dancing-links find x 231 ops/sec ±2.60% (85 runs sampled)
+dancing-links findRaw x 249 ops/sec ±0.83% (84 runs sampled)
+dlxlib x 66.70 ops/sec ±1.90% (70 runs sampled)
+dance x 37.58 ops/sec ±1.05% (65 runs sampled)
 Fastest is dancing-links findRaw
 
 
 Benchmark: Finding ten pentomino tilings on a 6x10 field
 
-dancing-links find x 37.41 ops/sec ±3.40% (52 runs sampled)
-dancing-links findRaw x 39.29 ops/sec ±3.56% (52 runs sampled)
-dlxlib x 11.15 ops/sec ±3.48% (32 runs sampled)
-dance x 7.05 ops/sec ±3.89% (23 runs sampled)
+dancing-links find x 38.64 ops/sec ±1.49% (52 runs sampled)
+dancing-links findRaw x 37.77 ops/sec ±3.22% (50 runs sampled)
+dlxlib x 10.54 ops/sec ±1.98% (30 runs sampled)
+dance x 7.75 ops/sec ±2.41% (24 runs sampled)
 
 Fastest is dancing-links findRaw
 
 
 Benchmark: Finding one hundred pentomino tilings on a 6x10 field
 
-dancing-links find x 5.28 ops/sec ±9.90% (18 runs sampled)
-dancing-links findRaw x 5.56 ops/sec ±2.41% (18 runs sampled)
-dlxlib x 1.63 ops/sec ±1.08% (9 runs sampled)
-dance x 1.08 ops/sec ±0.87% (7 runs sampled)
+dancing-links find x 5.18 ops/sec ±11.43% (17 runs sampled)
+dancing-links findRaw x 5.42 ops/sec ±1.20% (18 runs sampled)
+dlxlib x 1.50 ops/sec ±0.69% (8 runs sampled)
+dance x 1.15 ops/sec ±2.04% (7 runs sampled)
 
 Fastest is dancing-links findRaw
 ```
