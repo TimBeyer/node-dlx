@@ -1,6 +1,6 @@
 {
   "name": "dancing-links",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "Fastest JS solver for exact cover problems using Dancing Links",
   "author": "Tim Beyer",
   "license": "MIT",

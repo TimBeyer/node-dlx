@@ -177,9 +177,9 @@ Fastest is dancing-links findRaw
 
 ## Profiling
 
-You can generate a CPU profile of the algorithm using `npm run benchmark`.
+You can generate a CPU profile of the algorithm using `npm run profile`.
 It will create a file called `profile.cpuprofile` which you can then load into the Chrome inspector.
-To do this, you will need to install the optional dependency `v8-profiler` manually using `npm install v8-profiler`.  
+To do this, you will need to install the optional dependency `v8-profiler` manually using `npm install --no-save v8-profiler`.  
 This is because there isn't currently a way to specify optional dev dependencies, and as a dev dependency compiling of the dependency fails in CI.
 
 ## Examples
