@@ -18,3 +18,5 @@ export function find<T = any> (constraints: Constraint<T>[], numSolutions: numbe
 export function findRaw<T = any> (config: SearchConfig<T>) {
   return search<T>(config)
 }
+
+export { Constraint, SimpleConstraint, ComplexConstraint, SearchConfig, Row } from './lib/interfaces'
