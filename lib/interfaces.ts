@@ -24,6 +24,7 @@ export interface Result<T> {
   data: T
   index: number
 }
+
 export type BinaryNumber = (0 | 1)
 
 export interface SearchConfig<T = any> {
@@ -34,13 +35,13 @@ export interface SearchConfig<T = any> {
 }
 
 export interface SimpleConstraint<T = any> {
-  row: (1 | 0)[],
+  row: BinaryNumber[],
   data: T
 }
 
 export interface ComplexConstraint<T = any> {
-  primaryRow: (1 | 0)[]
-  secondaryRow: (1 | 0)[],
+  primaryRow: BinaryNumber[]
+  secondaryRow: BinaryNumber[],
   data: T
 }
 
