@@ -17,7 +17,8 @@
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "declaration": true,
-    "declarationDir": "./built/typings"
+    "declarationDir": "./built/typings",
+    "strict": true
   },
   "include": [
     "./index.ts",
