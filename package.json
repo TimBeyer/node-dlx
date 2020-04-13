@@ -37,7 +37,8 @@
     "coverage-report": "npm run coverage && codecov && rm -rf ./nyc_output && rm coverage.lcov",
     "lint": "tslint --project tsconfig.release.json --config tslint.json",
     "benchmark": "npm run build-dev && node built/lib/benchmark/index.js",
-    "profile": "npm run build-dev && node built/lib/benchmark/profile.js"
+    "profile": "npm run build-dev && node built/lib/benchmark/profile.js",
+    "format": "prettier --write \"**/*.ts\""
   },
   "nyc": {
     "per-file": true,
@@ -70,6 +71,7 @@
     "dlxlib": "^1.0.3",
     "mocha": "^5.0.0",
     "nyc": "^13.1.0",
+    "prettier": "^2.0.4",
     "rimraf": "^2.6.2",
     "ts-node": "^3.3.0",
     "tslint": "^5.12.1",
