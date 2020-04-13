@@ -1,4 +1,3 @@
-
 import { createWriteStream } from 'fs'
 import * as profiler from 'v8-profiler'
 import { findAll } from '..'

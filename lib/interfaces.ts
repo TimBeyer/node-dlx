@@ -25,7 +25,7 @@ export interface Result<T> {
   index: number
 }
 
-export type BinaryNumber = (0 | 1)
+export type BinaryNumber = 0 | 1
 
 export interface SearchConfig<T = any> {
   numPrimary: number
@@ -35,21 +35,21 @@ export interface SearchConfig<T = any> {
 }
 
 export interface SimpleConstraint<T = any> {
-  row: BinaryNumber[],
+  row: BinaryNumber[]
   data: T
 }
 
 export interface ComplexConstraint<T = any> {
   primaryRow: BinaryNumber[]
-  secondaryRow: BinaryNumber[],
+  secondaryRow: BinaryNumber[]
   data: T
 }
 
-export function isSimpleConstraint (arg: any): arg is SimpleConstraint {
+export function isSimpleConstraint(arg: any): arg is SimpleConstraint {
   return arg.row !== undefined
 }
 
-export function isComplexConstraint (arg: any): arg is ComplexConstraint {
+export function isComplexConstraint(arg: any): arg is ComplexConstraint {
   return arg.primaryRow !== undefined && arg.secondaryRow !== undefined
 }
 

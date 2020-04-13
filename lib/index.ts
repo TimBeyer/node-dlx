@@ -14,10 +14,10 @@ enum SearchState {
   ADVANCE,
   BACKUP,
   RECOVER,
-  DONE
+  DONE,
 }
 
-export function search<T> (config: SearchConfig<T>) {
+export function search<T>(config: SearchConfig<T>) {
   const { numSolutions, numPrimary, numSecondary, rows } = config
   const root: Column<T> = {} as Column<T>
 
@@ -32,7 +32,7 @@ export function search<T> (config: SearchConfig<T>) {
   let bestCol: Column<T>
   let currentNode: Node<T>
 
-  function readColumnNames () {
+  function readColumnNames() {
     // Skip root node
     let curColIndex = 1
 
@@ -43,7 +43,7 @@ export function search<T> (config: SearchConfig<T>) {
 
       const column: Column<T> = {
         len: 0,
-        head
+        head,
       }
 
       column.prev = colArray[curColIndex - 1]
@@ -65,7 +65,7 @@ export function search<T> (config: SearchConfig<T>) {
 
       const column: Column<T> = {
         head,
-        len: 0
+        len: 0,
       }
 
       column.prev = column
@@ -76,7 +76,7 @@ export function search<T> (config: SearchConfig<T>) {
     }
   }
 
-  function readRows () {
+  function readRows() {
     let curNodeIndex = 0
 
     for (let i = 0; i < rows.length; i++) {
@@ -119,7 +119,7 @@ export function search<T> (config: SearchConfig<T>) {
     }
   }
 
-  function cover (c: Column<T>) {
+  function cover(c: Column<T>) {
     const l = c.prev
     const r = c.next
 
@@ -141,7 +141,7 @@ export function search<T> (config: SearchConfig<T>) {
     }
   }
 
-  function uncover (c: Column<T>) {
+  function uncover(c: Column<T>) {
     // From bottom to top, right to left relink every row node to its column
     for (let rr = c.head.up; rr !== c.head; rr = rr.up) {
       for (let nn = rr.left; nn !== rr; nn = nn.left) {
@@ -163,7 +163,7 @@ export function search<T> (config: SearchConfig<T>) {
     r.prev = c
   }
 
-  function pickBestColum () {
+  function pickBestColum() {
     let lowestLen = root.next.len
     let lowest = root.next
 
@@ -178,7 +178,7 @@ export function search<T> (config: SearchConfig<T>) {
     bestCol = lowest
   }
 
-  function forward () {
+  function forward() {
     pickBestColum()
     cover(bestCol)
 
@@ -188,20 +188,20 @@ export function search<T> (config: SearchConfig<T>) {
     currentSearchState = SearchState.ADVANCE
   }
 
-  function recordSolution () {
+  function recordSolution() {
     let results: Result<T>[] = []
     for (let l = 0; l <= level; l++) {
       const node = choice[l]
       results.push({
         index: node.index,
-        data: node.data
+        data: node.data,
       })
     }
 
     solutions.push(results)
   }
 
-  function advance () {
+  function advance() {
     if (currentNode === bestCol.head) {
       currentSearchState = SearchState.BACKUP
       return
@@ -225,7 +225,7 @@ export function search<T> (config: SearchConfig<T>) {
     currentSearchState = SearchState.FORWARD
   }
 
-  function backup () {
+  function backup() {
     uncover(bestCol)
 
     if (level === 0) {
@@ -241,7 +241,7 @@ export function search<T> (config: SearchConfig<T>) {
     currentSearchState = SearchState.RECOVER
   }
 
-  function recover () {
+  function recover() {
     for (let pp = currentNode.left; pp !== currentNode; pp = pp.left) {
       uncover(pp.col)
     }
@@ -250,7 +250,7 @@ export function search<T> (config: SearchConfig<T>) {
     currentSearchState = SearchState.ADVANCE
   }
 
-  function done () {
+  function done() {
     running = false
   }
 
@@ -259,7 +259,7 @@ export function search<T> (config: SearchConfig<T>) {
     [SearchState.ADVANCE]: advance,
     [SearchState.BACKUP]: backup,
     [SearchState.RECOVER]: recover,
-    [SearchState.DONE]: done
+    [SearchState.DONE]: done,
   }
 
   readColumnNames()
