@@ -2,7 +2,7 @@ import { Constraint, Row, isSimpleConstraint, isComplexConstraint, SearchConfig 
 
 type BinaryInt = 0 | 1
 
-function binaryToSparseRow (binaryRow: BinaryInt[], offset: number = 0): number[] {
+function binaryToSparseRow(binaryRow: BinaryInt[], offset: number = 0): number[] {
   const sparseRow: number[] = []
 
   for (let i = 0; i < binaryRow.length; i++) {
@@ -14,7 +14,7 @@ function binaryToSparseRow (binaryRow: BinaryInt[], offset: number = 0): number[
   return sparseRow
 }
 
-function getParams (constraint: Constraint) {
+function getParams(constraint: Constraint) {
   let numPrimary: number = 0
   let numSecondary: number = 0
 
@@ -27,11 +27,11 @@ function getParams (constraint: Constraint) {
 
   return {
     numPrimary,
-    numSecondary
+    numSecondary,
   }
 }
 
-export function getSearchConfig<T = any> (numSolutions: number, constraints: Constraint<T>[]): SearchConfig<T> {
+export function getSearchConfig<T = any>(numSolutions: number, constraints: Constraint<T>[]): SearchConfig<T> {
   const { numPrimary, numSecondary } = getParams(constraints[0])
   const sparseConstraints: Row<T>[] = constraints.map((c) => {
     const data = c.data
@@ -44,7 +44,7 @@ export function getSearchConfig<T = any> (numSolutions: number, constraints: Con
 
     return {
       data,
-      coveredColumns
+      coveredColumns,
     }
   })
 
@@ -52,6 +52,6 @@ export function getSearchConfig<T = any> (numSolutions: number, constraints: Con
     numPrimary,
     numSecondary,
     numSolutions,
-    rows: sparseConstraints
+    rows: sparseConstraints,
   }
 }

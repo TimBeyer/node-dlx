@@ -1,4 +1,4 @@
-export type BinaryInt = (0 | 1)
+export type BinaryInt = 0 | 1
 
 export const NUM_PENTOMINOS = 12
 export enum PentominoType {
@@ -13,7 +13,7 @@ export enum PentominoType {
   W = 8,
   X = 9,
   Y = 10,
-  Z = 11
+  Z = 11,
 }
 
 export interface Pentomino {
@@ -30,140 +30,88 @@ const BASE_PENTOMINOS: Pentomino[] = [
     id: 'F',
     width: 3,
     height: 3,
-    matrix: [
-      0, 1, 1,
-      1, 1, 0,
-      0, 1, 0
-    ]
+    matrix: [0, 1, 1, 1, 1, 0, 0, 1, 0],
   },
   {
     type: PentominoType.I,
     id: 'I',
     width: 1,
     height: 5,
-    matrix: [
-      1,
-      1,
-      1,
-      1,
-      1
-    ]
+    matrix: [1, 1, 1, 1, 1],
   },
   {
     type: PentominoType.L,
     id: 'L',
     width: 2,
     height: 4,
-    matrix: [
-      1, 0,
-      1, 0,
-      1, 0,
-      1, 1
-    ]
+    matrix: [1, 0, 1, 0, 1, 0, 1, 1],
   },
   {
     type: PentominoType.N,
     id: 'N',
     width: 2,
     height: 4,
-    matrix: [
-      0, 1,
-      0, 1,
-      1, 1,
-      1, 0
-    ]
+    matrix: [0, 1, 0, 1, 1, 1, 1, 0],
   },
   {
     type: PentominoType.P,
     id: 'P',
     width: 2,
     height: 3,
-    matrix: [
-      1, 1,
-      1, 1,
-      1, 0
-    ]
+    matrix: [1, 1, 1, 1, 1, 0],
   },
   {
     type: PentominoType.T,
     id: 'T',
     width: 3,
     height: 3,
-    matrix: [
-      1, 1, 1,
-      0, 1, 0,
-      0, 1, 0
-    ]
+    matrix: [1, 1, 1, 0, 1, 0, 0, 1, 0],
   },
   {
     type: PentominoType.U,
     id: 'U',
     width: 3,
     height: 2,
-    matrix: [
-      1, 0, 1,
-      1, 1, 1
-    ]
+    matrix: [1, 0, 1, 1, 1, 1],
   },
   {
     type: PentominoType.V,
     id: 'V',
     width: 3,
     height: 3,
-    matrix: [
-      1, 0, 0,
-      1, 0, 0,
-      1, 1, 1
-    ]
+    matrix: [1, 0, 0, 1, 0, 0, 1, 1, 1],
   },
   {
     type: PentominoType.W,
     id: 'W',
     width: 3,
     height: 3,
-    matrix: [
-      0, 1, 1,
-      1, 1, 0,
-      1, 0, 0
-    ]
+    matrix: [0, 1, 1, 1, 1, 0, 1, 0, 0],
   },
   {
     type: PentominoType.X,
     id: 'X',
     width: 3,
     height: 3,
-    matrix: [
-      0, 1, 0,
-      1, 1, 1,
-      0, 1, 0
-    ]
+    matrix: [0, 1, 0, 1, 1, 1, 0, 1, 0],
   },
   {
     type: PentominoType.Y,
     id: 'Y',
     width: 2,
     height: 4,
-    matrix: [
-      0, 1,
-      1, 1,
-      0, 1,
-      0, 1
-    ]
+    matrix: [0, 1, 1, 1, 0, 1, 0, 1],
   },
   {
     type: PentominoType.Z,
     id: 'Z',
     width: 3,
     height: 3,
-    matrix: [
-      1, 1, 0,
-      0, 1, 0,
-      0, 1, 1
-    ]
-  }
+    matrix: [1, 1, 0, 0, 1, 0, 0, 1, 1],
+  },
 ]
 
-function isEqual (p1: Pentomino, p2: Pentomino): boolean {
+function isEqual(p1: Pentomino, p2: Pentomino): boolean {
   if (p1.type !== p2.type) {
     return false
   }
@@ -181,11 +129,11 @@ function isEqual (p1: Pentomino, p2: Pentomino): boolean {
   return p1.matrix.join('') === p2.matrix.join('')
 }
 
-function getIndex (x: number, y: number, width: number) {
+function getIndex(x: number, y: number, width: number) {
   return y * width + x
 }
 
-export function rotatePentomino (pentomino: Pentomino): Pentomino {
+export function rotatePentomino(pentomino: Pentomino): Pentomino {
   const width = pentomino.height
   const height = pentomino.width
 
@@ -205,11 +153,11 @@ export function rotatePentomino (pentomino: Pentomino): Pentomino {
     id: pentomino.id,
     width,
     height,
-    matrix
+    matrix,
   }
 }
 
-export function mirrorPentomino (pentomino: Pentomino): Pentomino {
+export function mirrorPentomino(pentomino: Pentomino): Pentomino {
   const { width, height, type, id } = pentomino
   const matrix: BinaryInt[] = []
 
@@ -223,7 +171,11 @@ export function mirrorPentomino (pentomino: Pentomino): Pentomino {
   }
 
   return {
-    type, width, height, matrix, id
+    type,
+    width,
+    height,
+    matrix,
+    id,
   }
 }
 
