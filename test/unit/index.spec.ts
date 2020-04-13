@@ -8,20 +8,20 @@ describe('search', function () {
       let constraints: SimpleConstraint<number>[] = [
         {
           data: 0,
-          row: [1,0,0]
+          row: [1, 0, 0],
         },
         {
           data: 1,
-          row: [0,1,0]
+          row: [0, 1, 0],
         },
         {
           data: 2,
-          row: [0,0,1]
+          row: [0, 0, 1],
         },
         {
           data: 3,
-          row: [1,0,1]
-        }
+          row: [1, 0, 1],
+        },
       ]
 
       let solutions = findAll(constraints)
@@ -30,8 +30,8 @@ describe('search', function () {
         return solution.map((s) => s.data)
       })
 
-      expect(data[0].sort()).to.eql([0,1,2])
-      expect(data[1].sort()).to.eql([1,3])
+      expect(data[0].sort()).to.eql([0, 1, 2])
+      expect(data[1].sort()).to.eql([1, 3])
     })
   })
 
@@ -40,24 +40,24 @@ describe('search', function () {
       let constraints: ComplexConstraint<number>[] = [
         {
           data: 0,
-          primaryRow: [1,0,0],
-          secondaryRow: [0]
+          primaryRow: [1, 0, 0],
+          secondaryRow: [0],
         },
         {
           data: 1,
-          primaryRow: [0,1,0],
-          secondaryRow: [1]
+          primaryRow: [0, 1, 0],
+          secondaryRow: [1],
         },
         {
           data: 2,
-          primaryRow: [0,0,1],
-          secondaryRow: [0]
+          primaryRow: [0, 0, 1],
+          secondaryRow: [0],
         },
         {
           data: 3,
-          primaryRow: [1,0,1],
-          secondaryRow: [1]
-        }
+          primaryRow: [1, 0, 1],
+          secondaryRow: [1],
+        },
       ]
 
       let solutions = findAll(constraints)
@@ -67,7 +67,7 @@ describe('search', function () {
       })
 
       expect(data.length).to.eql(1)
-      expect(data[0].sort()).to.eql([0,1,2])
+      expect(data[0].sort()).to.eql([0, 1, 2])
     })
   })
 })
