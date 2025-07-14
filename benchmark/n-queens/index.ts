@@ -1,5 +1,5 @@
-import { createEncoder } from './encoder'
-import { ComplexConstraint } from '../../lib/interfaces'
+import { createEncoder } from './encoder.js'
+import { ComplexConstraint } from '../../lib/interfaces.js'
 
 export function createConstraints(fieldSize: number): ComplexConstraint[] {
   const encode = createEncoder(fieldSize)

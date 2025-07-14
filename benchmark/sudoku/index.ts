@@ -1,4 +1,4 @@
-import { SimpleConstraint, Row, Result } from '../../built/typings/interfaces.js'
+import { SimpleConstraint, Row, Result } from '../../lib/interfaces.js'
 
 type MultiConstraint<T> = SimpleConstraint<T> & Row<T>
 

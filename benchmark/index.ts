@@ -4,9 +4,9 @@ import * as dance from 'dance'
 import * as dancingLinksAlgorithm from 'dancing-links-algorithm'
 
 // import { createConstraints } from './n-queens'
-import { find, findRaw } from '../built/lib/index.js'
+import { find, findRaw } from '../index.js'
 import { ALL_CONSTRAINTS } from './pentomino/field.js'
-import { getSearchConfig } from '../built/lib/utils.js'
+import { getSearchConfig } from '../lib/utils.js'
 import { generateConstraints, parseStringFormat, printBoard } from './sudoku/index.js'
 
 function benchmarkSudoku() {
@@ -40,10 +40,10 @@ function benchmarkSudoku() {
     .add('dancing-links-algorithm', function () {
       dancingLinksAlgorithm.solve(plainRows)
     })
-    .on('cycle', function (event) {
+    .on('cycle', function (event: any) {
       console.log(String(event.target))
     })
-    .on('complete', function () {
+    .on('complete', function (this: any) {
       console.log('Fastest is ' + this.filter('fastest').map('name') + '\n\n')
     })
     .run()
@@ -71,10 +71,10 @@ function benchmarkOneTiling() {
         maxSolutions: 1
       })
     })
-    .on('cycle', function (event) {
+    .on('cycle', function (event: any) {
       console.log(String(event.target))
     })
-    .on('complete', function () {
+    .on('complete', function (this: any) {
       console.log('Fastest is ' + this.filter('fastest').map('name') + '\n\n')
     })
     .run()
@@ -103,10 +103,10 @@ function benchmarkTenTilings() {
         maxSolutions: 10
       })
     })
-    .on('cycle', function (event) {
+    .on('cycle', function (event: any) {
       console.log(String(event.target))
     })
-    .on('complete', function () {
+    .on('complete', function (this: any) {
       console.log('\nFastest is ' + this.filter('fastest').map('name') + '\n\n')
     })
     .run()
@@ -135,10 +135,10 @@ function benchmarkHundredTilings() {
         maxSolutions: 100
       })
     })
-    .on('cycle', function (event) {
+    .on('cycle', function (event: any) {
       console.log(String(event.target))
     })
-    .on('complete', function () {
+    .on('complete', function (this: any) {
       console.log('\nFastest is ' + this.filter('fastest').map('name') + '\n\n')
     })
     .run()

@@ -47,8 +47,9 @@
     "lint:fix": "eslint --ext .ts . --fix",
     "format": "prettier --write '**/*.{ts,js,json,md}'",
     "format:check": "prettier --check '**/*.{ts,js,json,md}'",
-    "benchmark": "npm run build && node benchmark-working.mjs",
-    "profile": "npm run build && node --experimental-loader ts-node/esm benchmark/profile.ts",
+    "build:dev": "npm run clean && tsc -p tsconfig.dev.json",
+    "benchmark": "npm run build:dev && node built/benchmark/index.js",
+    "profile": "npm run build:dev && node built/benchmark/profile.js",
     "release": "release-it"
   },
   "nyc": {
