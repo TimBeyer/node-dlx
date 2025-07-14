@@ -1,13 +1,13 @@
-import * as Benchmark from 'benchmark'
+import Benchmark from 'benchmark'
 import * as dlxlib from 'dlxlib'
 import * as dance from 'dance'
 import * as dancingLinksAlgorithm from 'dancing-links-algorithm'
 
 // import { createConstraints } from './n-queens'
-import { find, findRaw } from '..'
-import { ALL_CONSTRAINTS } from './pentomino/field'
-import { getSearchConfig } from '../lib/utils'
-import { generateConstraints, parseStringFormat, printBoard } from './sudoku'
+import { find, findRaw } from '../built/lib/index.js'
+import { ALL_CONSTRAINTS } from './pentomino/field.js'
+import { getSearchConfig } from '../built/lib/utils.js'
+import { generateConstraints, parseStringFormat, printBoard } from './sudoku/index.js'
 
 function benchmarkSudoku() {
   console.log('Benchmark: A solution to the sodoku\n')
