@@ -7,7 +7,7 @@
  * and in order to work around the lack of `goto` in JS
  */
 
-import { Column, Node, Result, SearchConfig } from './interfaces'
+import { Column, Node, Result, SearchConfig } from './interfaces.js'
 
 enum SearchState {
   FORWARD,
@@ -17,27 +17,27 @@ enum SearchState {
   DONE
 }
 
-export function search<T> (config: SearchConfig<T>) {
+export function search<T>(config: SearchConfig<T>) {
   const { numSolutions, numPrimary, numSecondary, rows } = config
   const root: Column<T> = {} as Column<T>
 
-  const colArray = [root]
+  const colArray: Column<T>[] = [root]
   const nodeArray: Node<T>[] = []
   const solutions: Result<T>[][] = []
 
   let currentSearchState: SearchState = SearchState.FORWARD
   let running = true
   let level = 0
-  let choice: Node<T>[] = []
+  const choice: Node<T>[] = []
   let bestCol: Column<T>
   let currentNode: Node<T>
 
-  function readColumnNames () {
+  function readColumnNames() {
     // Skip root node
     let curColIndex = 1
 
     for (let i = 0; i < numPrimary; i++) {
-      const head: Node<T> = {}
+      const head: Node<T> = {} as Node<T>
       head.up = head
       head.down = head
 
@@ -46,20 +46,23 @@ export function search<T> (config: SearchConfig<T>) {
         head
       }
 
-      column.prev = colArray[curColIndex - 1]
-      colArray[curColIndex - 1].next = column
+      const prevColumn = colArray[curColIndex - 1]
+      if (prevColumn) {
+        column.prev = prevColumn
+        prevColumn.next = column
+      }
 
       colArray[curColIndex] = column
       curColIndex = curColIndex + 1
     }
 
-    const lastCol = colArray[curColIndex - 1]
+    const lastCol = colArray[curColIndex - 1]!
     // Link the last primary constraint to wrap back into the root
     lastCol.next = root
     root.prev = lastCol
 
     for (let i = 0; i < numSecondary; i++) {
-      const head: Node<T> = {}
+      const head: Node<T> = {} as Node<T>
       head.up = head
       head.down = head
 
@@ -76,15 +79,17 @@ export function search<T> (config: SearchConfig<T>) {
     }
   }
 
-  function readRows () {
+  function readRows() {
     let curNodeIndex = 0
 
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i]
-      let rowStart: Node<T> = undefined
+      if (!row) continue
+
+      let rowStart: Node<T> | undefined = undefined
 
       for (const columnIndex of row.coveredColumns) {
-        let node: Node<T> = {}
+        const node: Node<T> = {} as Node<T>
         node.left = node
         node.right = node
         node.down = node
@@ -97,15 +102,15 @@ export function search<T> (config: SearchConfig<T>) {
         if (!rowStart) {
           rowStart = node
         } else {
-          node.left = nodeArray[curNodeIndex - 1]
-          nodeArray[curNodeIndex - 1].right = node
+          node.left = nodeArray[curNodeIndex - 1]!
+          nodeArray[curNodeIndex - 1]!.right = node
         }
 
-        const col = colArray[columnIndex + 1]
+        const col = colArray[columnIndex + 1]!
         node.col = col
 
-        node.up = col.head.up
-        col.head.up.down = node
+        node.up = col.head.up!
+        col.head.up!.down = node
 
         col.head.up = node
         node.down = col.head
@@ -114,61 +119,63 @@ export function search<T> (config: SearchConfig<T>) {
         curNodeIndex = curNodeIndex + 1
       }
 
-      rowStart.left = nodeArray[curNodeIndex - 1]
-      nodeArray[curNodeIndex - 1].right = rowStart
+      if (rowStart) {
+        rowStart.left = nodeArray[curNodeIndex - 1]!
+        nodeArray[curNodeIndex - 1]!.right = rowStart
+      }
     }
   }
 
-  function cover (c: Column<T>) {
-    const l = c.prev
-    const r = c.next
+  function cover(c: Column<T>) {
+    const l = c.prev!
+    const r = c.next!
 
     // Unlink column
     l.next = r
     r.prev = l
 
     // From to to bottom, left to right unlink every row node from its column
-    for (let rr = c.head.down; rr !== c.head; rr = rr.down) {
-      for (let nn = rr.right; nn !== rr; nn = nn.right) {
-        let uu = nn.up
-        let dd = nn.down
+    for (let rr = c.head.down!; rr !== c.head; rr = rr.down!) {
+      for (let nn = rr.right!; nn !== rr; nn = nn.right!) {
+        const uu = nn.up!
+        const dd = nn.down!
 
         uu.down = dd
         dd.up = uu
 
-        nn.col.len -= 1
+        nn.col!.len -= 1
       }
     }
   }
 
-  function uncover (c: Column<T>) {
+  function uncover(c: Column<T>) {
     // From bottom to top, right to left relink every row node to its column
-    for (let rr = c.head.up; rr !== c.head; rr = rr.up) {
-      for (let nn = rr.left; nn !== rr; nn = nn.left) {
-        let uu = nn.up
-        let dd = nn.down
+    for (let rr = c.head.up!; rr !== c.head; rr = rr.up!) {
+      for (let nn = rr.left!; nn !== rr; nn = nn.left!) {
+        const uu = nn.up!
+        const dd = nn.down!
 
         uu.down = nn
         dd.up = nn
 
-        nn.col.len += 1
+        nn.col!.len += 1
       }
     }
 
-    const l = c.prev
-    const r = c.next
+    const l = c.prev!
+    const r = c.next!
 
     // Unlink column
     l.next = c
     r.prev = c
   }
 
-  function pickBestColum () {
-    let lowestLen = root.next.len
-    let lowest = root.next
+  function pickBestColum() {
+    let lowestLen = root.next!.len
+    let lowest = root.next!
 
-    for (let curCol = root.next; curCol !== root; curCol = curCol.next) {
-      let length = curCol.len
+    for (let curCol = root.next!; curCol !== root; curCol = curCol.next!) {
+      const length = curCol.len
       if (length < lowestLen) {
         lowestLen = length
         lowest = curCol
@@ -178,37 +185,37 @@ export function search<T> (config: SearchConfig<T>) {
     bestCol = lowest
   }
 
-  function forward () {
+  function forward() {
     pickBestColum()
     cover(bestCol)
 
-    currentNode = bestCol.head.down
+    currentNode = bestCol.head.down!
     choice[level] = currentNode
 
     currentSearchState = SearchState.ADVANCE
   }
 
-  function recordSolution () {
-    let results: Result<T>[] = []
+  function recordSolution() {
+    const results: Result<T>[] = []
     for (let l = 0; l <= level; l++) {
-      const node = choice[l]
+      const node = choice[l]!
       results.push({
-        index: node.index,
-        data: node.data
+        index: node.index!,
+        data: node.data!
       })
     }
 
     solutions.push(results)
   }
 
-  function advance () {
+  function advance() {
     if (currentNode === bestCol.head) {
       currentSearchState = SearchState.BACKUP
       return
     }
 
-    for (let pp = currentNode.right; pp !== currentNode; pp = pp.right) {
-      cover(pp.col)
+    for (let pp = currentNode.right!; pp !== currentNode; pp = pp.right!) {
+      cover(pp.col!)
     }
 
     if (root.next === root) {
@@ -225,7 +232,7 @@ export function search<T> (config: SearchConfig<T>) {
     currentSearchState = SearchState.FORWARD
   }
 
-  function backup () {
+  function backup() {
     uncover(bestCol)
 
     if (level === 0) {
@@ -235,22 +242,22 @@ export function search<T> (config: SearchConfig<T>) {
 
     level = level - 1
 
-    currentNode = choice[level]
-    bestCol = currentNode.col
+    currentNode = choice[level]!
+    bestCol = currentNode.col!
 
     currentSearchState = SearchState.RECOVER
   }
 
-  function recover () {
-    for (let pp = currentNode.left; pp !== currentNode; pp = pp.left) {
-      uncover(pp.col)
+  function recover() {
+    for (let pp = currentNode.left!; pp !== currentNode; pp = pp.left!) {
+      uncover(pp.col!)
     }
-    currentNode = currentNode.down
+    currentNode = currentNode.down!
     choice[level] = currentNode
     currentSearchState = SearchState.ADVANCE
   }
 
-  function done () {
+  function done() {
     running = false
   }
 

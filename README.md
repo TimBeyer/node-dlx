@@ -12,23 +12,22 @@ It is currently [the fastest](#benchmarks) Dancing Links implementation in JS.
 ## Usage
 
 ```javascript
-
 const dlx = require('dancing-links')
 
 // Simple case
 const constraints = [
-    {
-        data: 'first one',
-        row: [1,0]
-    },
-    {
-        data: 'second one',
-        row: [0,1]
-    },
-    {
-        data: 'third one',
-        row: [0,1]
-    }
+  {
+    data: 'first one',
+    row: [1, 0]
+  },
+  {
+    data: 'second one',
+    row: [0, 1]
+  },
+  {
+    data: 'third one',
+    row: [0, 1]
+  }
 ]
 
 const oneSolution = dlx.findOne(constraints)
@@ -66,21 +65,21 @@ const allSolutions = dlx.findAll(constraints)
 // Secondary constraints
 
 const constraints = [
-    {
-        data: 'first one',
-        primaryRow: [1,0],
-        secondaryRow: [1]
-    },
-    {
-        data: 'second one',
-        primaryRow: [0,1],
-        secondaryRow: [0]
-    },
-    {
-        data: 'third one',
-        primaryRow: [0,1],
-        secondaryRow: [1]
-    }
+  {
+    data: 'first one',
+    primaryRow: [1, 0],
+    secondaryRow: [1]
+  },
+  {
+    data: 'second one',
+    primaryRow: [0, 1],
+    secondaryRow: [0]
+  },
+  {
+    data: 'third one',
+    primaryRow: [0, 1],
+    secondaryRow: [1]
+  }
 ]
 
 const oneSolution = dlx.findOne(constraints)
@@ -97,7 +96,7 @@ const oneSolution = dlx.findOne(constraints)
 
 const allSolutions = dlx.findAll(constraints)
 /**
- * 
+ *
  * Not the best example, but for brevity's sake believe me that it works as intended.
  *
  * [{
@@ -117,7 +116,6 @@ Previously, this library was directly based on the [original DLX paper](https://
 However, in order to improve performance and align with [Knuth's reference implementation](https://cs.stanford.edu/~knuth/programs/dance.w), the algorithm needed to be converted to an iteration.
 
 Since JS does not support the `goto` statement, and since it's considered harmful anyway, the implementation uses a very simple state machine to execute the algorithm.
-
 
 ## Benchmarks
 
