@@ -3,7 +3,7 @@ import { ComplexConstraint } from '../../lib/interfaces.js'
 
 export function createConstraints(fieldSize: number): ComplexConstraint[] {
   const encode = createEncoder(fieldSize)
-  const constraints = []
+  const constraints: ComplexConstraint[] = []
 
   for (let x = 0; x < fieldSize; x++) {
     for (let y = 0; y < fieldSize; y++) {

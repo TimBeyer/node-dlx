@@ -15,7 +15,10 @@ declare module 'dancing-links-algorithm' {
   export function solve(matrix: number[][]): any[]
 }
 
-declare module 'v8-profiler' {
-  export function startProfiling(name: string, recordSamples?: boolean): void
-  export function stopProfiling(name?: string): any
+declare module 'v8-profiler-next' {
+  const profiler: {
+    startProfiling(name: string, recordSamples?: boolean): void
+    stopProfiling(name?: string): any
+  }
+  export = profiler
 }
