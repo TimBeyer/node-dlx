@@ -48,8 +48,8 @@
     "lint:fix": "eslint --ext .ts . --fix",
     "format": "prettier --write '**/*.{ts,js,json,md}'",
     "format:check": "prettier --check '**/*.{ts,js,json,md}'",
-    "benchmark": "npm run build && node built/lib/benchmark/index.js",
-    "profile": "npm run build && node built/lib/benchmark/profile.js"
+    "benchmark": "npm run build && node --experimental-loader ts-node/esm benchmark/index.ts",
+    "profile": "npm run build && node --experimental-loader ts-node/esm benchmark/profile.ts"
   },
   "nyc": {
     "per-file": true,
