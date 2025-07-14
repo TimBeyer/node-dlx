@@ -22,7 +22,7 @@
     }
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "directories": {
     "test": "test"
@@ -43,13 +43,14 @@
     "test-unit": "NODE_ENV=test mocha --loader=ts-node/esm 'test/unit/**/*.spec.ts'",
     "cover": "nyc npm run test-unit",
     "coverage": "npm run cover && nyc report --reporter=text-lcov > coverage.lcov",
-    "coverage-report": "npm run coverage && codecov && rm -rf ./nyc_output && rm coverage.lcov",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --ext .ts . --fix",
     "format": "prettier --write '**/*.{ts,js,json,md}'",
     "format:check": "prettier --check '**/*.{ts,js,json,md}'",
-    "benchmark": "npm run build && node --experimental-loader ts-node/esm benchmark/index.ts",
-    "profile": "npm run build && node --experimental-loader ts-node/esm benchmark/profile.ts"
+    "build:dev": "npm run clean && tsc -p tsconfig.dev.json",
+    "benchmark": "npm run build:dev && node built/benchmark/index.js",
+    "profile": "npm run build:dev && node built/benchmark/profile.js",
+    "release": "release-it"
   },
   "nyc": {
     "per-file": true,
@@ -68,8 +69,8 @@
     "all": true,
     "sourceMap": true
   },
-  "dependencies": {},
   "devDependencies": {
+    "@release-it/conventional-changelog": "^10.0.1",
     "@types/benchmark": "^2.1.5",
     "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
@@ -78,7 +79,6 @@
     "@typescript-eslint/parser": "^8.18.2",
     "benchmark": "^2.1.4",
     "chai": "^5.2.1",
-    "codecov": "^3.8.2",
     "dance": "^0.1.0",
     "dancing-links-algorithm": "^1.0.1",
     "dlxlib": "^1.0.3",
@@ -88,8 +88,10 @@
     "mocha": "^11.0.2",
     "nyc": "^17.1.0",
     "prettier": "^3.4.2",
+    "release-it": "^19.0.3",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "v8-profiler-next": "^1.10.0"
   }
 }

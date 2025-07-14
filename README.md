@@ -214,11 +214,11 @@ They aren't very optimized (the pentomino tiling does not consider symmetries) b
 
 ## Development
 
-This project uses modern tooling and requires **Node.js 18+**.
+This project uses modern tooling and requires **Node.js 20+**.
 
 ### Prerequisites
 
-- Node.js 18 or higher
+- Node.js 20 or higher
 - npm 8 or higher
 
 ### Setup
@@ -237,13 +237,45 @@ npm install
 - `npm run benchmark` - Run performance benchmarks
 - `npm run coverage` - Generate test coverage report
 
+### Conventional Commits
+
+This project follows [Conventional Commits](https://www.conventionalcommits.org/) specification for automated releases and changelog generation. Please use the following commit message format:
+
+```
+<type>[optional scope]: <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+**Types:**
+
+- `feat:` - A new feature (triggers minor version bump)
+- `fix:` - A bug fix (triggers patch version bump)
+- `docs:` - Documentation only changes
+- `style:` - Changes that do not affect the meaning of the code (white-space, formatting, etc)
+- `refactor:` - A code change that neither fixes a bug nor adds a feature
+- `perf:` - A code change that improves performance
+- `test:` - Adding missing tests or correcting existing tests
+- `chore:` - Changes to the build process or auxiliary tools
+
+**Breaking Changes:**
+To trigger a major version release, include `BREAKING CHANGE:` in the commit footer or add `!` after the type:
+
+```
+feat!: remove support for Node.js 16
+
+BREAKING CHANGE: Node.js 18+ is now required
+```
+
 ### Modern Features
 
 - **ESM Support**: Full ES Module support with proper import/export syntax
 - **TypeScript 5.x**: Modern TypeScript with strict type checking
 - **ESLint**: Code quality and consistency checks
 - **Prettier**: Automatic code formatting
-- **Node 18+ Support**: Leverages modern Node.js features
+- **Node 20+ Support**: Leverages modern Node.js features
 
 ### Architecture
 

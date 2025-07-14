@@ -1,3 +1,5 @@
+import { ComplexConstraint, BinaryNumber } from '../../lib/interfaces.js'
+
 function constant<T>(t: T): () => T {
   return () => t
 }
@@ -12,8 +14,8 @@ function times<T>(n: number, fn: () => T): T[] {
   return returnValue
 }
 
-function oneAt(length, index) {
-  let array = times(length, constant(0))
+function oneAt(length: number, index: number): BinaryNumber[] {
+  let array = times(length, constant(0 as BinaryNumber))
   array[index] = 1
   return array
 }
@@ -27,22 +29,22 @@ function getDiagonalIndex(
   return reverse ? x + y : fieldSize + x - y - 1
 }
 
-export function createEncoder(fieldSize) {
-  const primaryRow = function (x: number, y: number) {
+export function createEncoder(fieldSize: number) {
+  const primaryRow = function (x: number, y: number): BinaryNumber[] {
     const row = oneAt(fieldSize, x)
     const column = oneAt(fieldSize, y)
-    return row.concat(column)
+    return [...row, ...column] as BinaryNumber[]
   }
 
-  const secondaryRow = function (x: number, y: number) {
+  const secondaryRow = function (x: number, y: number): BinaryNumber[] {
     const numDiagonals = 2 * fieldSize - 1
     const diagonal = oneAt(numDiagonals, getDiagonalIndex(fieldSize, x, y))
     const reverseDiagonal = oneAt(numDiagonals, getDiagonalIndex(fieldSize, x, y, true))
 
-    return diagonal.concat(reverseDiagonal)
+    return [...diagonal, ...reverseDiagonal] as BinaryNumber[]
   }
 
-  return function encodePosition(x, y) {
+  return function encodePosition(x: number, y: number): ComplexConstraint {
     return {
       data: {
         position: [x, y]

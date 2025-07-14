@@ -64,6 +64,6 @@ export default [
     }
   },
   {
-    ignores: ['built/**', 'node_modules/**', 'benchmark/**']
+    ignores: ['built/**', 'node_modules/**', 'benchmark/**', '*.mjs']
   }
 ]
