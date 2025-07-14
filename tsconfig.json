@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "./built/lib",
+    "declarationDir": "./built/typings",
+    "lib": ["ES2022"],
+    "sourceMap": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // Strict Type Checking - reduced from full strict mode
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["./index.ts", "./lib/**/*", "./test/**/*"],
+  "exclude": ["node_modules", "built", "benchmark"],
+  "ts-node": {
+    "esm": true
+  }
+}

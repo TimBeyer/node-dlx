@@ -11,24 +11,50 @@ It is currently [the fastest](#benchmarks) Dancing Links implementation in JS.
 
 ## Usage
 
-```javascript
+### ES Modules (Modern)
 
+```javascript
+import { findOne, findAll } from 'dancing-links'
+
+// Simple case
+const constraints = [
+  {
+    data: 'first one',
+    row: [1, 0]
+  },
+  {
+    data: 'second one',
+    row: [0, 1]
+  },
+  {
+    data: 'third one',
+    row: [0, 1]
+  }
+]
+
+const oneSolution = findOne(constraints)
+const allSolutions = findAll(constraints)
+```
+
+### CommonJS (Legacy)
+
+```javascript
 const dlx = require('dancing-links')
 
 // Simple case
 const constraints = [
-    {
-        data: 'first one',
-        row: [1,0]
-    },
-    {
-        data: 'second one',
-        row: [0,1]
-    },
-    {
-        data: 'third one',
-        row: [0,1]
-    }
+  {
+    data: 'first one',
+    row: [1, 0]
+  },
+  {
+    data: 'second one',
+    row: [0, 1]
+  },
+  {
+    data: 'third one',
+    row: [0, 1]
+  }
 ]
 
 const oneSolution = dlx.findOne(constraints)
@@ -66,21 +92,21 @@ const allSolutions = dlx.findAll(constraints)
 // Secondary constraints
 
 const constraints = [
-    {
-        data: 'first one',
-        primaryRow: [1,0],
-        secondaryRow: [1]
-    },
-    {
-        data: 'second one',
-        primaryRow: [0,1],
-        secondaryRow: [0]
-    },
-    {
-        data: 'third one',
-        primaryRow: [0,1],
-        secondaryRow: [1]
-    }
+  {
+    data: 'first one',
+    primaryRow: [1, 0],
+    secondaryRow: [1]
+  },
+  {
+    data: 'second one',
+    primaryRow: [0, 1],
+    secondaryRow: [0]
+  },
+  {
+    data: 'third one',
+    primaryRow: [0, 1],
+    secondaryRow: [1]
+  }
 ]
 
 const oneSolution = dlx.findOne(constraints)
@@ -97,7 +123,7 @@ const oneSolution = dlx.findOne(constraints)
 
 const allSolutions = dlx.findAll(constraints)
 /**
- * 
+ *
  * Not the best example, but for brevity's sake believe me that it works as intended.
  *
  * [{
@@ -117,7 +143,6 @@ Previously, this library was directly based on the [original DLX paper](https://
 However, in order to improve performance and align with [Knuth's reference implementation](https://cs.stanford.edu/~knuth/programs/dance.w), the algorithm needed to be converted to an iteration.
 
 Since JS does not support the `goto` statement, and since it's considered harmful anyway, the implementation uses a very simple state machine to execute the algorithm.
-
 
 ## Benchmarks
 
@@ -186,3 +211,44 @@ This is because there isn't currently a way to specify optional dev dependencies
 
 The [benchmark directory](https://github.com/TimBeyer/node-dlx/tree/master/benchmark) implements encoders for the n-queens and pentomino tiling problems.  
 They aren't very optimized (the pentomino tiling does not consider symmetries) but you can use them as examples for how to encode your constraints for the library.
+
+## Development
+
+This project uses modern tooling and requires **Node.js 18+**.
+
+### Prerequisites
+
+- Node.js 18 or higher
+- npm 8 or higher
+
+### Setup
+
+```bash
+npm install
+```
+
+### Scripts
+
+- `npm run build` - Build the TypeScript code to JavaScript
+- `npm test` - Run the test suite
+- `npm run lint` - Run ESLint code quality checks
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting
+- `npm run benchmark` - Run performance benchmarks
+- `npm run coverage` - Generate test coverage report
+
+### Modern Features
+
+- **ESM Support**: Full ES Module support with proper import/export syntax
+- **TypeScript 5.x**: Modern TypeScript with strict type checking
+- **ESLint**: Code quality and consistency checks
+- **Prettier**: Automatic code formatting
+- **Node 18+ Support**: Leverages modern Node.js features
+
+### Architecture
+
+The core algorithm implementation is in:
+
+- `lib/index.ts` - Main Dancing Links algorithm implementation
+- `lib/interfaces.ts` - TypeScript interfaces and types
+- `lib/utils.ts` - Utility functions for constraint conversion

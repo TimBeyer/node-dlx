@@ -8,7 +8,7 @@ export interface SudokuInput {
   colIndex: number
 }
 
-function times<T> (n: number, fn: () => T): T[] {
+function times<T>(n: number, fn: () => T): T[] {
   const returnValue: T[] = []
 
   for (let i = 0; i < n; i++) {
@@ -18,7 +18,10 @@ function times<T> (n: number, fn: () => T): T[] {
   return returnValue
 }
 
-export function generateConstraints (size = 9, inputs: SudokuInput[] = []): MultiConstraint<SudokuInput>[] {
+export function generateConstraints(
+  size = 9,
+  inputs: SudokuInput[] = []
+): MultiConstraint<SudokuInput>[] {
   const blockSize = Math.sqrt(size)
   // each of the numbers can be in any x|y just once
   const numRowColConstraints = size * size
@@ -34,9 +37,9 @@ export function generateConstraints (size = 9, inputs: SudokuInput[] = []): Mult
   const allIndexes = []
   for (let currentRow = 0; currentRow < size; currentRow++) {
     for (let currentCol = 0; currentCol < size; currentCol++) {
-      const matchingInput = inputs.find((i) => i.colIndex === currentCol && i.rowIndex === currentRow)
+      const matchingInput = inputs.find(i => i.colIndex === currentCol && i.rowIndex === currentRow)
 
-      for (let currentNumber = 0; currentNumber < size; currentNumber ++) {
+      for (let currentNumber = 0; currentNumber < size; currentNumber++) {
         if (matchingInput) {
           // Internally we index with zero, but numbers start at 1
           if (matchingInput.number !== currentNumber + 1) {
@@ -46,7 +49,7 @@ export function generateConstraints (size = 9, inputs: SudokuInput[] = []): Mult
         }
         // The matrix rows go in the order
         // [...rowColConstraints, ...rowConstraints, ...colConstraints, ...blockConstraints]
-        const numberOffset = (currentNumber * size)
+        const numberOffset = currentNumber * size
         const rowColNumber = size * currentRow + currentCol
         const rowColIndex = rowColNumber
 
@@ -57,9 +60,16 @@ export function generateConstraints (size = 9, inputs: SudokuInput[] = []): Mult
         const blockCol = Math.floor(currentCol / blockSize)
         const blockNumber = blockSize * blockRow + blockCol
 
-        const blockIndex = numRowColConstraints + numRowConstraints + numColConstraints + (numberOffset + blockNumber)
+        const blockIndex =
+          numRowColConstraints +
+          numRowConstraints +
+          numColConstraints +
+          (numberOffset + blockNumber)
 
-        const row = times(numRowColConstraints + numRowConstraints + numColConstraints + numBlockConstraints, () => 0) as (1 | 0)[]
+        const row = times(
+          numRowColConstraints + numRowConstraints + numColConstraints + numBlockConstraints,
+          () => 0
+        ) as (1 | 0)[]
 
         row[rowColIndex] = 1
         row[rowIndex] = 1
@@ -87,23 +97,23 @@ export function generateConstraints (size = 9, inputs: SudokuInput[] = []): Mult
   return constraints
 }
 
-export function printBoard (size = 9, inputs: SudokuInput[]): string {
+export function printBoard(size = 9, inputs: SudokuInput[]): string {
   const rows: string[][] = times(size, () => times(size, () => '.'))
 
   for (let x = 0; x < size; x++) {
     for (let y = 0; y < size; y++) {
-      const field = inputs.find((input) => input.colIndex === x && input.rowIndex === y)
+      const field = inputs.find(input => input.colIndex === x && input.rowIndex === y)
       rows[y][x] = String((field && field.number) || '.')
     }
   }
 
-  const joinedRows = rows.map((row) => row.join('|'))
+  const joinedRows = rows.map(row => row.join('|'))
   const board = joinedRows.join('\n')
 
   return board
 }
 
-export function parseStringFormat (size = 9, dotFormat: string) {
+export function parseStringFormat(size = 9, dotFormat: string) {
   const inputs: SudokuInput[] = []
 
   for (let row = 0; row < size; row++) {
@@ -123,6 +133,11 @@ export function parseStringFormat (size = 9, dotFormat: string) {
   return inputs
 }
 
-export function logResults (size = 9, results: Result<SudokuInput>[][]) {
-  console.log(results.map((s) => s.map((c) => c.data)).map((s) => printBoard(size, s)).join('\n\n'))
+export function logResults(size = 9, results: Result<SudokuInput>[][]) {
+  console.log(
+    results
+      .map(s => s.map(c => c.data))
+      .map(s => printBoard(size, s))
+      .join('\n\n')
+  )
 }

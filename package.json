@@ -12,8 +12,18 @@
   "bugs": {
     "url": "https://github.com/TimBeyer/node-dlx/issues"
   },
+  "type": "module",
   "main": "built/lib/index.js",
   "types": "built/typings/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./built/typings/index.d.ts",
+      "import": "./built/lib/index.js"
+    }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "directories": {
     "test": "test"
   },
@@ -26,18 +36,20 @@
   ],
   "scripts": {
     "clean": "rimraf built",
-    "build": "npm run clean && tsc -p tsconfig.release.json",
-    "build-dev": "npm run clean && tsc -p tsconfig.dev.json",
+    "build": "npm run clean && tsc",
     "prepare": "npm run build",
     "test": "npm run test-unit",
     "test-watch": "npm run test-unit -- --watch",
-    "test-unit": "NODE_ENV=test mocha --require ts-node/register 'test/unit/**/*.spec.ts'",
+    "test-unit": "NODE_ENV=test mocha --loader=ts-node/esm 'test/unit/**/*.spec.ts'",
     "cover": "nyc npm run test-unit",
     "coverage": "npm run cover && nyc report --reporter=text-lcov > coverage.lcov",
     "coverage-report": "npm run coverage && codecov && rm -rf ./nyc_output && rm coverage.lcov",
-    "lint": "tslint --project tsconfig.release.json --config tslint.json",
-    "benchmark": "npm run build-dev && node built/lib/benchmark/index.js",
-    "profile": "npm run build-dev && node built/lib/benchmark/profile.js"
+    "lint": "eslint --ext .ts .",
+    "lint:fix": "eslint --ext .ts . --fix",
+    "format": "prettier --write '**/*.{ts,js,json,md}'",
+    "format:check": "prettier --check '**/*.{ts,js,json,md}'",
+    "benchmark": "npm run build && node --experimental-loader ts-node/esm benchmark/index.ts",
+    "profile": "npm run build && node --experimental-loader ts-node/esm benchmark/profile.ts"
   },
   "nyc": {
     "per-file": true,
@@ -58,22 +70,26 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/benchmark": "^1.0.31",
-    "@types/chai": "^4.0.4",
-    "@types/mocha": "^2.2.44",
-    "@types/node": "^10.12.18",
+    "@types/benchmark": "^2.1.5",
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.10.4",
+    "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
     "benchmark": "^2.1.4",
-    "chai": "^4.2.0",
-    "codecov": "^3.1.0",
+    "chai": "^5.2.1",
+    "codecov": "^3.8.2",
     "dance": "^0.1.0",
     "dancing-links-algorithm": "^1.0.1",
     "dlxlib": "^1.0.3",
-    "mocha": "^5.0.0",
-    "nyc": "^13.1.0",
-    "rimraf": "^2.6.2",
-    "ts-node": "^3.3.0",
-    "tslint": "^5.12.1",
-    "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.2.4"
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "mocha": "^11.0.2",
+    "nyc": "^17.1.0",
+    "prettier": "^3.4.2",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   }
 }

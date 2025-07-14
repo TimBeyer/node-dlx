@@ -3,7 +3,7 @@ jobs:
   test:
     parallelism: 1
     docker:
-      - image: node:10
+      - image: node:20
         environment:
           NPM_CONFIG_PROGRESS: false
           NPM_CONFIG_LOGLEVEL: warn
@@ -11,11 +11,15 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
       - run:
           name: Lint
           command: |
             npm run lint
+      - run:
+          name: Format Check
+          command: |
+            npm run format:check
       - run:
           name: Unit Tests
           command: |
@@ -23,7 +27,7 @@ jobs:
   build:
     parallelism: 1
     docker:
-      - image: node:10
+      - image: node:20
         environment:
           NPM_CONFIG_PROGRESS: false
           NPM_CONFIG_LOGLEVEL: warn
@@ -31,7 +35,7 @@ jobs:
       - checkout
       - run:
           name: Install dependencies
-          command: npm install
+          command: npm ci
       - run:
           name: Build
           command: |
