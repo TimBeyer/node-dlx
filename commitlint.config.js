@@ -1,4 +1,4 @@
 export default {
   extends: ['@commitlint/config-conventional'],
-  ignores: [(commit) => commit === 'Initial plan']
+  ignores: [commit => commit === 'Initial plan']
 }
