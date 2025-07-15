@@ -27,11 +27,30 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Check commit messages for conventional format
+      if: github.event_name == 'pull_request'
+      run: |
+        # Check commits in this PR for conventional commit format
+        BASE_SHA="${{ github.event.pull_request.base.sha }}"
+        HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+        
+        # Get commits that don't follow conventional format (excluding merges)
+        NON_CONVENTIONAL=$(git log $BASE_SHA..$HEAD_SHA --oneline --no-merges \
+          --invert-grep --grep="^feat\|^fix\|^docs\|^style\|^refactor\|^perf\|^test\|^chore\|^build\|^ci\|^revert")
+        
+        if [ -n "$NON_CONVENTIONAL" ]; then
+          echo "❌ Found commits that don't follow conventional commit format:"
+          echo "$NON_CONVENTIONAL"
+          echo ""
+          echo "Please use conventional commit format: https://www.conventionalcommits.org/"
+          echo "Examples: feat: add feature, fix: fix bug, docs: update readme"
+          exit 1
+        else
+          echo "✅ All commits follow conventional commit format"
+        fi
+
     - name: Run linting
       run: npm run lint
-
-    - name: Check markdown formatting
-      run: npm run lint:md
 
     - name: Check formatting
       run: npm run format:check

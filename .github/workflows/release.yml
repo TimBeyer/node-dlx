@@ -26,6 +26,33 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
+    - name: Check commit messages
+      run: |
+        # Check if commits since last release follow conventional commit format
+        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        if [ -z "$LAST_TAG" ]; then
+          # No previous tags, check all commits except merges and initial
+          COMMIT_RANGE="--all"
+        else
+          # Check commits since last tag
+          COMMIT_RANGE="${LAST_TAG}..HEAD"
+        fi
+        
+        # Get commits that don't follow conventional format (excluding merges and release commits)
+        NON_CONVENTIONAL=$(git log $COMMIT_RANGE --oneline --no-merges \
+          --invert-grep --grep="^feat\|^fix\|^docs\|^style\|^refactor\|^perf\|^test\|^chore\|^build\|^ci\|^revert" \
+          --grep="^chore: release\|^Initial commit" --invert-grep | head -5)
+        
+        if [ -n "$NON_CONVENTIONAL" ]; then
+          echo "⚠️  Warning: Found commits that don't follow conventional commit format:"
+          echo "$NON_CONVENTIONAL"
+          echo ""
+          echo "Please use conventional commit format: https://www.conventionalcommits.org/"
+          echo "Examples: feat: add feature, fix: fix bug, docs: update readme"
+        else
+          echo "✅ All commits follow conventional commit format"
+        fi
+
     - name: Run tests
       run: npm run test
 
@@ -36,18 +63,6 @@ jobs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        # Set up commit message template for conventional commits
-        git config --global commit.template <(echo "chore: automated release tasks
-
-# Please ensure commit messages follow conventional commit format:
-# feat: new feature
-# fix: bug fix  
-# chore: maintenance tasks
-# docs: documentation changes
-# style: formatting changes
-# refactor: code refactoring
-# test: test changes
-# perf: performance improvements")
 
     - name: Check for conventional commits and release
       run: |
@@ -66,27 +81,9 @@ jobs:
         if [ "$CONVENTIONAL_COMMITS" -gt 0 ]; then
           echo "Found $CONVENTIONAL_COMMITS conventional commits. Creating release..."
           npm run release -- --ci
-          # Format generated files after release
-          npm run format
-          # Check if formatting changed any files
-          if ! git diff --quiet; then
-            echo "Formatting changes detected, committing formatted files..."
-            git add .
-            git commit -m "chore: format generated files after release"
-            git push
-          fi
         elif [ "$NON_CONVENTIONAL_COMMITS" -gt 0 ]; then
           echo "Found $NON_CONVENTIONAL_COMMITS non-conventional commits. Creating patch release..."
           npm run release -- --ci --increment patch
-          # Format generated files after release
-          npm run format
-          # Check if formatting changed any files
-          if ! git diff --quiet; then
-            echo "Formatting changes detected, committing formatted files..."
-            git add .
-            git commit -m "chore: format generated files after patch release"
-            git push
-          fi
         else
           echo "No commits found for release."
         fi
