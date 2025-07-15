@@ -29,11 +29,7 @@ jobs:
 
     - name: Lint commit messages
       if: github.event_name == 'pull_request'
-      run: |
-        # Check commits in this PR using commitlint
-        BASE_SHA="${{ github.event.pull_request.base.sha }}"
-        HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-        npx commitlint --from $BASE_SHA --to $HEAD_SHA --verbose
+      uses: wagoid/commitlint-github-action@v6
 
     - name: Run linting
       run: npm run lint
