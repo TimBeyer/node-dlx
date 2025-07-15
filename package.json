@@ -47,6 +47,7 @@
     "lint:fix": "eslint --ext .ts . --fix",
     "format": "prettier --write '**/*.{ts,js,json,md}'",
     "format:check": "prettier --check '**/*.{ts,js,json,md}'",
+    "commitlint": "commitlint --from HEAD~1 --to HEAD --verbose",
     "build:dev": "npm run clean && tsc -p tsconfig.dev.json",
     "benchmark": "npm run build:dev && node built/benchmark/index.js",
     "profile": "npm run build:dev && node built/benchmark/profile.js",
@@ -70,6 +71,8 @@
     "sourceMap": true
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@release-it/conventional-changelog": "^10.0.1",
     "@types/benchmark": "^2.1.5",
     "@types/chai": "^5.2.2",
