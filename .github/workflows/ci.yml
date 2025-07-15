@@ -30,6 +30,9 @@ jobs:
     - name: Run linting
       run: npm run lint
 
+    - name: Check markdown formatting
+      run: npm run lint:md
+
     - name: Check formatting
       run: npm run format:check
 

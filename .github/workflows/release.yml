@@ -36,17 +36,59 @@ jobs:
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        # Set up commit message template for conventional commits
+        git config --global commit.template <(echo "chore: automated release tasks
+
+# Please ensure commit messages follow conventional commit format:
+# feat: new feature
+# fix: bug fix  
+# chore: maintenance tasks
+# docs: documentation changes
+# style: formatting changes
+# refactor: code refactoring
+# test: test changes
+# perf: performance improvements")
 
     - name: Check for conventional commits and release
       run: |
         # Check if there are any conventional commits since last release
-        CONVENTIONAL_COMMITS=$(git log $(git describe --tags --abbrev=0)..HEAD --oneline --grep="^feat\|^fix\|^perf\|BREAKING CHANGE" | wc -l)
+        LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+        if [ -z "$LAST_TAG" ]; then
+          # No previous tags, check all commits
+          CONVENTIONAL_COMMITS=$(git log --oneline --grep="^feat\|^fix\|^perf\|BREAKING CHANGE" | wc -l)
+          NON_CONVENTIONAL_COMMITS=$(git log --oneline --invert-grep --grep="^feat\|^fix\|^perf\|BREAKING CHANGE\|^chore: release\|^Merge\|^Initial commit" | wc -l)
+        else
+          # Check commits since last tag
+          CONVENTIONAL_COMMITS=$(git log ${LAST_TAG}..HEAD --oneline --grep="^feat\|^fix\|^perf\|BREAKING CHANGE" | wc -l)
+          NON_CONVENTIONAL_COMMITS=$(git log ${LAST_TAG}..HEAD --oneline --invert-grep --grep="^feat\|^fix\|^perf\|BREAKING CHANGE\|^chore: release\|^Merge" | wc -l)
+        fi
         
         if [ "$CONVENTIONAL_COMMITS" -gt 0 ]; then
           echo "Found $CONVENTIONAL_COMMITS conventional commits. Creating release..."
           npm run release -- --ci
+          # Format generated files after release
+          npm run format
+          # Check if formatting changed any files
+          if ! git diff --quiet; then
+            echo "Formatting changes detected, committing formatted files..."
+            git add .
+            git commit -m "chore: format generated files after release"
+            git push
+          fi
+        elif [ "$NON_CONVENTIONAL_COMMITS" -gt 0 ]; then
+          echo "Found $NON_CONVENTIONAL_COMMITS non-conventional commits. Creating patch release..."
+          npm run release -- --ci --increment patch
+          # Format generated files after release
+          npm run format
+          # Check if formatting changed any files
+          if ! git diff --quiet; then
+            echo "Formatting changes detected, committing formatted files..."
+            git add .
+            git commit -m "chore: format generated files after patch release"
+            git push
+          fi
         else
-          echo "No conventional commits found. Skipping release."
+          echo "No commits found for release."
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
