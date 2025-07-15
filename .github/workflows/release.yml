@@ -10,16 +10,17 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: github.event.workflow_run.conclusion == 'success' && !contains(github.event.workflow_run.head_commit.message, 'chore: release')
 
     steps:
     - name: Checkout repository
+      if: "github.event.workflow_run.conclusion == 'success' && !contains(github.event.workflow_run.head_commit.message, 'chore: release')"
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Setup Node.js
+      if: "github.event.workflow_run.conclusion == 'success' && !contains(github.event.workflow_run.head_commit.message, 'chore: release')"
       uses: actions/setup-node@v4
       with:
         node-version: 20
@@ -27,17 +28,21 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
 
     - name: Install dependencies
+      if: "github.event.workflow_run.conclusion == 'success' && !contains(github.event.workflow_run.head_commit.message, 'chore: release')"
       run: npm ci
 
     - name: Build project
+      if: "github.event.workflow_run.conclusion == 'success' && !contains(github.event.workflow_run.head_commit.message, 'chore: release')"
       run: npm run build
 
     - name: Configure Git
+      if: "github.event.workflow_run.conclusion == 'success' && !contains(github.event.workflow_run.head_commit.message, 'chore: release')"
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
     - name: Release
+      if: "github.event.workflow_run.conclusion == 'success' && !contains(github.event.workflow_run.head_commit.message, 'chore: release')"
       run: npm run release -- --ci
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
