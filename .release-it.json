@@ -17,5 +17,9 @@
       "preset": "angular",
       "infile": "CHANGELOG.md"
     }
+  },
+  "hooks": {
+    "after:bump": "npm run format",
+    "before:git:commit": "npm run format"
   }
 }

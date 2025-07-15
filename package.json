@@ -70,6 +70,8 @@
     "sourceMap": true
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@release-it/conventional-changelog": "^10.0.1",
     "@types/benchmark": "^2.1.5",
     "@types/chai": "^5.2.2",
